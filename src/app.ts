@@ -8,7 +8,7 @@
  */
 import { WebGLRenderer, PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { SeedScene } from 'scenes';
+import SeedScene from './components/scenes/SeedScene';
 
 // Initialize core ThreeJS components
 const scene = new SeedScene();
@@ -23,7 +23,7 @@ camera.lookAt(new Vector3(0, 0, 0));
 renderer.setPixelRatio(window.devicePixelRatio);
 const canvas = renderer.domElement;
 canvas.style.display = 'block'; // Removes padding below canvas
-document.body.style.margin = 0; // Removes margin around page
+document.body.style.margin = '0'; // Removes margin around page
 document.body.style.overflow = 'hidden'; // Fix scrolling
 document.body.appendChild(canvas);
 
@@ -36,20 +36,20 @@ controls.maxDistance = 16;
 controls.update();
 
 // Render loop
-const onAnimationFrameHandler = (timeStamp) => {
-    controls.update();
-    renderer.render(scene, camera);
-    scene.update && scene.update(timeStamp);
-    window.requestAnimationFrame(onAnimationFrameHandler);
+const onAnimationFrameHandler = (timeStamp: number) => {
+  controls.update();
+  renderer.render(scene, camera);
+  scene.update && scene.update(timeStamp);
+  window.requestAnimationFrame(onAnimationFrameHandler);
 };
 window.requestAnimationFrame(onAnimationFrameHandler);
 
 // Resize Handler
 const windowResizeHandler = () => {
-    const { innerHeight, innerWidth } = window;
-    renderer.setSize(innerWidth, innerHeight);
-    camera.aspect = innerWidth / innerHeight;
-    camera.updateProjectionMatrix();
+  const { innerHeight, innerWidth } = window;
+  renderer.setSize(innerWidth, innerHeight);
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
 };
 windowResizeHandler();
 window.addEventListener('resize', windowResizeHandler, false);

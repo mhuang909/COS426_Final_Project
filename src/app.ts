@@ -1,55 +1,31 @@
-/**
- * app.js
- *
- * This is the first file loaded. It sets up the Renderer,
- * Scene and Camera. It also starts the render loop and
- * handles window resizes.
- *
- */
-import { WebGLRenderer, PerspectiveCamera, Vector3 } from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import SeedScene from './components/scenes/SeedScene';
+import { Application, Assets, Sprite } from "pixi.js";
 
-// Initialize core ThreeJS components
-const scene = new SeedScene();
-const camera = new PerspectiveCamera();
-const renderer = new WebGLRenderer({ antialias: true });
+(async () => {
+  // Create a PixiJS application.
+  const app = new Application();
 
-// Set up camera
-camera.position.set(6, 3, -10);
-camera.lookAt(new Vector3(0, 0, 0));
+  // Intialize the application.
+  await app.init({ background: "#1099bb", resizeTo: window });
 
-// Set up renderer, canvas, and minor CSS adjustments
-renderer.setPixelRatio(window.devicePixelRatio);
-const canvas = renderer.domElement;
-canvas.style.display = 'block'; // Removes padding below canvas
-document.body.style.margin = '0'; // Removes margin around page
-document.body.style.overflow = 'hidden'; // Fix scrolling
-document.body.appendChild(canvas);
+  // Then adding the application's canvas to the DOM body.
+  document.body.appendChild(app.canvas);
+  // Load the bunny texture.
+  const texture = await Assets.load('https://pixijs.com/assets/bunny.png');
 
-// Set up controls
-const controls = new OrbitControls(camera, canvas);
-controls.enableDamping = true;
-controls.enablePan = false;
-controls.minDistance = 4;
-controls.maxDistance = 16;
-controls.update();
+  // Create a new Sprite from an image path
+  const bunny = new Sprite(texture);
 
-// Render loop
-const onAnimationFrameHandler = (timeStamp: number) => {
-  controls.update();
-  renderer.render(scene, camera);
-  scene.update && scene.update(timeStamp);
-  window.requestAnimationFrame(onAnimationFrameHandler);
-};
-window.requestAnimationFrame(onAnimationFrameHandler);
+  // Add to stage
+  app.stage.addChild(bunny);
 
-// Resize Handler
-const windowResizeHandler = () => {
-  const { innerHeight, innerWidth } = window;
-  renderer.setSize(innerWidth, innerHeight);
-  camera.aspect = innerWidth / innerHeight;
-  camera.updateProjectionMatrix();
-};
-windowResizeHandler();
-window.addEventListener('resize', windowResizeHandler, false);
+  // Center the sprite's anchor point
+  bunny.anchor.set(0.5);
+
+  // Move the sprite to the center of the screen
+  bunny.x = app.screen.width / 2;
+  bunny.y = app.screen.height / 2;
+
+  app.ticker.add((time) => {
+    bunny.rotation += 0.1 * time.deltaTime
+  })
+})();

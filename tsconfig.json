@@ -3,7 +3,9 @@
     "listFiles": true,
     "outDir": "./built",
     "allowJs": true,
-    "target": "es6"
+    "target": "es6",
+    "esModuleInterop": true,
+  "moduleResolution": "node",
   },
   "include": ["./src/**/*"]
 }

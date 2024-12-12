@@ -53,10 +53,11 @@ module.exports = {
       lights$: path.resolve(__dirname, 'src/components/lights'),
       objects$: path.resolve(__dirname, 'src/components/objects'),
       scenes$: path.resolve(__dirname, 'src/components/scenes'),
+      node_modules$: path.resolve(__dirname, 'node_modules/')
     },
     extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
   },
   plugins: [
     new HtmlWebpackPlugin({ title: pkg.title, favicon: 'src/favicon.ico' }),
-  ],
+  ]
 };

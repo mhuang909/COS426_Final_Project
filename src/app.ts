@@ -1,8 +1,7 @@
 import { Controller } from "@components/controller/Controller";
 import { Player } from "@components/objects/Player/player";
-import { AnimatedSprite, Application, Assets, Sprite, Spritesheet, Texture } from "pixi.js";
+import { AnimatedSprite, Application, Assets, Spritesheet, Texture } from "pixi.js";
 import { atlasData } from "./assets/atlas";
-import Image from './assets/characters.png'
 
 (async () => {
   // Create a PixiJS application.
@@ -18,8 +17,9 @@ import Image from './assets/characters.png'
   const controller = new Controller();
 
   const player = new Player(controller)
-  Assets.add({ alias: 'characters', src: Image })
-  await Assets.load({ alias: 'characters' });
+  Assets.add({ alias: 'characters', src: atlasData.meta.image })
+  const textures = await Assets.load({ alias: 'characters' });
+  textures.source.scaleMode = 'nearest'
 
   const spritesheet = new Spritesheet(
     Texture.from(atlasData.meta.image),
@@ -30,7 +30,9 @@ import Image from './assets/characters.png'
 
   const anim = new AnimatedSprite(spritesheet.animations.player)
 
-  anim.animationSpeed = 0.1
+  anim.animationSpeed = 0.15
+  anim.scale = 3
+  anim.texture.uvs
   anim.play();
 
 

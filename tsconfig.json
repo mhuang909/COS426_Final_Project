@@ -5,7 +5,10 @@
     "allowJs": true,
     "target": "es6",
     "esModuleInterop": true,
-  "moduleResolution": "node",
+    "moduleResolution": "node",
+    "paths": {
+      "@components/*": ["./src/components/*"]
+    }
   },
   "include": ["./src/**/*"]
 }

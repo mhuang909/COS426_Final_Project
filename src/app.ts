@@ -1,3 +1,5 @@
+import { Controller } from "@components/controller/Controller";
+import { Player } from "@components/objects/Player/player";
 import { Application, Assets, Sprite } from "pixi.js";
 
 (async () => {
@@ -14,9 +16,12 @@ import { Application, Assets, Sprite } from "pixi.js";
 
   // Create a new Sprite from an image path
   const bunny = new Sprite(texture);
+  const controller = new Controller();
+
+  const player = new Player(controller)
 
   // Add to stage
-  app.stage.addChild(bunny);
+  app.stage.addChild(player.view);
 
   // Center the sprite's anchor point
   bunny.anchor.set(0.5);

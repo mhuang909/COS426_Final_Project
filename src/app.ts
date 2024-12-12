@@ -1,6 +1,8 @@
 import { Controller } from "@components/controller/Controller";
 import { Player } from "@components/objects/Player/player";
-import { Application, Assets, Sprite } from "pixi.js";
+import { AnimatedSprite, Application, Assets, Sprite, Spritesheet, Texture } from "pixi.js";
+import { atlasData } from "./assets/atlas";
+import Image from './assets/characters.png'
 
 (async () => {
   // Create a PixiJS application.
@@ -11,26 +13,28 @@ import { Application, Assets, Sprite } from "pixi.js";
 
   // Then adding the application's canvas to the DOM body.
   document.body.appendChild(app.canvas);
-  // Load the bunny texture.
-  const texture = await Assets.load('https://pixijs.com/assets/bunny.png');
 
   // Create a new Sprite from an image path
-  const bunny = new Sprite(texture);
   const controller = new Controller();
 
   const player = new Player(controller)
+  Assets.add({ alias: 'characters', src: Image })
+  await Assets.load({ alias: 'characters' });
+
+  const spritesheet = new Spritesheet(
+    Texture.from(atlasData.meta.image),
+    atlasData
+  )
+
+  await spritesheet.parse()
+
+  const anim = new AnimatedSprite(spritesheet.animations.player)
+
+  anim.animationSpeed = 0.1
+  anim.play();
+
 
   // Add to stage
-  app.stage.addChild(player.view);
+  app.stage.addChild(player.view, anim);
 
-  // Center the sprite's anchor point
-  bunny.anchor.set(0.5);
-
-  // Move the sprite to the center of the screen
-  bunny.x = app.screen.width / 2;
-  bunny.y = app.screen.height / 2;
-
-  app.ticker.add((time) => {
-    bunny.rotation += 0.1 * time.deltaTime
-  })
 })();

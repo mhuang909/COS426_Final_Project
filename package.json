@@ -23,6 +23,7 @@
     "deploy": "npm run prebuild && webpack --mode production --progress && gh-pages -d build"
   },
   "dependencies": {
+    "@pixi/tilemap": "^5.0.1",
     "@types/pixi.js": "^5.0.0",
     "@types/three": "^0.170.0",
     "dat.gui": "^0.7.7",

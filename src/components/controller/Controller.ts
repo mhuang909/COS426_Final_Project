@@ -19,10 +19,13 @@ type key = {
   doubleTap: boolean,
   timestamp: number,
 }
+type KeyCallback = (k: control, state: key) => void
 
 export class Controller {
   keys: Record<control, key>
   delay: number
+  keyUpCallbacks: KeyCallback[]
+  keyDownCallbacks: KeyCallback[]
 
   constructor(dblTapDelayMs?: number) {
     if (!dblTapDelayMs) this.delay = 300;
@@ -35,8 +38,19 @@ export class Controller {
       right: { pressed: false, doubleTap: false, timestamp: 0 },
     }
 
+    this.keyUpCallbacks = []
+    this.keyDownCallbacks = []
+
     window.addEventListener('keydown', (ev) => this.keydownHandler(ev))
     window.addEventListener('keyup', (ev) => this.keyupHandler(ev))
+  }
+
+  attachKeyUpCallback(fn: KeyCallback) {
+    this.keyUpCallbacks.push(fn)
+  }
+
+  attachKeyDownCallback(fn: KeyCallback) {
+    this.keyDownCallbacks.push(fn)
   }
 
   keydownHandler(ev: KeyboardEvent) {
@@ -48,6 +62,8 @@ export class Controller {
 
     this.keys[key].pressed = true;
 
+    this.keyDownCallbacks.forEach(fn => fn(key, this.keys[key]))
+
   }
 
   keyupHandler(ev: KeyboardEvent) {
@@ -55,10 +71,11 @@ export class Controller {
     if (!key) return;
 
     const now = Date.now();
-
     this.keys[key].pressed = false;
 
     if (this.keys[key].doubleTap) this.keys[key].doubleTap = false;
     else this.keys[key].timestamp = now;
+
+    this.keyUpCallbacks.forEach(fn => fn(key, this.keys[key]))
   }
 }

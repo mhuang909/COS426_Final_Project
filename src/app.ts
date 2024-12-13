@@ -53,61 +53,46 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
   )
 
   const tilemap = new Tilemap(tileSpriteSheet.textureSource)
-  // console.log(app.renderer.height);
 
   let rows = sceneData.rows;
   let cols = sceneData.cols;
   const ids = [tileSpriteSheet.textures.grass_top]
   let index = 0;
-  let scaleWidth = app.renderer.width / ( 8 * 16);
+  let scaleWidth = app.renderer.width / (8 * 16);
   let scaleHeight = app.renderer.height / (8 * 16);
 
-  for (let i = 0; i < rows; i++){
-    for (let j = 0; j < cols; j++){
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < cols; j++) {
       let id = sceneData.data[index];
       tilemap.tile(ids[id], i * 16, j * 16)
       index++;
     }
   }
 
-
-  // tilemap.tile(tileSpriteSheet.textures.grass_top, 0, 0)
-  // tilemap.tile(tileSpriteSheet.textures.grass_top, 32, 0)
   tilemap.scale.x = scaleWidth;
   tilemap.scale.y = scaleHeight;
 
-  //tilemap.addChild(player.view);
-  const scene = {
-    tiles: [
-      ["grass-top"],
-      [],
-      []
-    ]
-
-  }
-
-  const platform = new Platform(3, 4, 120, 120, tilemap)
-
+  const platform = new Platform(80, innerHeight - 120, 16 * 120, 120)
+  const p2 = new Platform(256, innerHeight - 400, 64, 196)
 
   //Add to stage
-  app.stage.addChild(tilemap, player.view);
+  app.stage.addChild(tilemap, player.view, platform.view, p2.view);
 
   app.ticker.add((ticker) => {
     const deltaTime = ticker.deltaTime;
     PhysicsEngineInst.update(deltaTime);
     player.update(deltaTime)
   })
-  window.onresize = function (event){    
-    var w = window.innerWidth;    
-    var h = window.innerHeight;    
-    let scaleWidth = w / ( 8 * 16);
+
+  window.onresize = function(event) {
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    let scaleWidth = w / (8 * 16);
     let scaleHeight = h / (8 * 16);
     tilemap.scale.x = scaleWidth;
     tilemap.scale.y = scaleHeight;
-    app.stage.addChild(tilemap);
     player.view.position.x = player.relativeX * w;
     player.view.position.y = player.relativeY * h;
-    app.stage.addChild(player.view);
-    }
+  }
 
 })();

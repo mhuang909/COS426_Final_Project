@@ -3,6 +3,9 @@ import { Player } from "@components/objects/Player/player";
 import { AnimatedSprite, Application, Assets, Spritesheet, Texture } from "pixi.js";
 import { atlasData } from "./assets/atlas";
 
+document.body.style.margin = '0'; // Removes margin around page
+document.body.style.overflow = 'hidden'; // Fix scrolling
+
 (async () => {
   // Create a PixiJS application.
   const app = new Application();
@@ -16,7 +19,6 @@ import { atlasData } from "./assets/atlas";
   // Create a new Sprite from an image path
   const controller = new Controller();
 
-  const player = new Player(controller)
   Assets.add({ alias: 'characters', src: atlasData.meta.image })
   const textures = await Assets.load({ alias: 'characters' });
   textures.source.scaleMode = 'nearest'
@@ -28,15 +30,23 @@ import { atlasData } from "./assets/atlas";
 
   await spritesheet.parse()
 
-  const anim = new AnimatedSprite(spritesheet.animations.player)
+  const playerWalk = new AnimatedSprite(spritesheet.animations.player)
 
-  anim.animationSpeed = 0.15
-  anim.scale = 3
-  anim.texture.uvs
-  anim.play();
+  playerWalk.animationSpeed = 0.15
+  playerWalk.scale = 3
+  playerWalk.texture.uvs
+  // playerWalk.play();
 
-
+  const player = new Player(controller,
+    {
+      walk: playerWalk,
+    }
+  )
   // Add to stage
-  app.stage.addChild(player.view, anim);
+  app.stage.addChild(player.view);
+
+  app.ticker.add((ticker) => {
+    player.update(ticker.deltaTime)
+  })
 
 })();

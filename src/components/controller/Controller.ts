@@ -1,6 +1,6 @@
 // Adapted from https://pixijs.com/8.x/tutorials/spine-boy-adventure#6
 
-const keyMap = {
+const keyMap: Record<string, control> = {
   Space: 'space',
   KeyW: 'up',
   ArrowUp: 'up',
@@ -12,6 +12,8 @@ const keyMap = {
   ArrowRight: 'right',
 }
 
+type control = 'space' | 'up' | 'down' | 'left' | 'right'
+
 type key = {
   pressed: boolean,
   doubleTap: boolean,
@@ -19,7 +21,7 @@ type key = {
 }
 
 export class Controller {
-  keys: Record<string, key>
+  keys: Record<control, key>
   delay: number
 
   constructor(dblTapDelayMs?: number) {

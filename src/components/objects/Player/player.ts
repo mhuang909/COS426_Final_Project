@@ -3,6 +3,7 @@ import { Rectangle } from "@components/debug/Rectangle";
 import { CollisionBody } from "@components/physics/collisionbody";
 import { PhysicsBody } from "@components/physics/physics";
 import { AnimatedSprite, Container } from "pixi.js";
+import { Vector2 } from "three";
 
 type PlayerAnimations = {
   walk: AnimatedSprite
@@ -18,6 +19,10 @@ export class Player {
   relativeY: number;
   physicsBody: PhysicsBody;
   collisionBody: CollisionBody;
+  jumpHeight: number
+  jumping: boolean
+  jumpStart: number
+  jumpEnd: boolean
 
   constructor(c: Controller, animations: PlayerAnimations) {
     this.view = new Container();
@@ -38,14 +43,19 @@ export class Player {
 
     this.view.pivot.set(this.view.width / 2, this.view.height / 2)
 
-    this.physicsBody = new PhysicsBody(this.view, 50)
     this.collisionBody = new CollisionBody(this.view.width / 4, this.view.height / 2)
-    this.view.addChild(this.collisionBody.view)
+    this.physicsBody = new PhysicsBody(this.view, this.collisionBody, 7, 3)
     this.collisionBody.view.x = this.view.width / 2 - this.collisionBody.view.width / 2
     this.collisionBody.view.y = this.view.height - this.collisionBody.view.height
-    this.collisionBody.onCollision((o) => {
-      console.log("Colliding")
+
+    this.collisionBody.onCollision((_, sides) => {
+      if (sides.includes("bottom")) {
+        this.jumpEnd = true
+      }
     })
+
+    this.jumping = false;
+    this.jumpHeight = 128;
   }
 
   update(deltaTime: number) {
@@ -55,13 +65,39 @@ export class Player {
     if (this.controller.keys['right'].pressed) {
       this.animations.walk.play()
       this.view.scale.x = 1
-      this.view.position.x += 2 * deltaTime
+      this.physicsBody.speed.setX(6)
     } else if (this.controller.keys['left'].pressed) {
       this.view.scale.x = -1
-      this.view.position.x -= 2 * deltaTime
+      this.physicsBody.speed.setX(-6)
       this.animations.walk.play()
     } else {
+      this.physicsBody.speed.setX(0)
       this.animations.walk.gotoAndStop(0)
+    }
+
+
+
+    if (this.controller.keys.space.pressed && (this.physicsBody.onGround || this.jumping)) {
+      if (!this.jumping) {
+        this.jumping = true
+        this.jumpStart = this.collisionBody.maxY()
+      }
+
+      if (!this.jumpEnd) {
+        this.physicsBody.speed.y -= 4
+      }
+
+      console.log(this.jumpStart - this.collisionBody.maxY())
+      if (this.jumpStart - this.collisionBody.maxY() >= this.jumpHeight) {
+        this.jumpEnd = true
+      }
+    }
+
+    if (!this.controller.keys.space.pressed) {
+      this.jumping = false
+      if (this.physicsBody.onGround) {
+        this.jumpEnd = false
+      }
     }
   }
 }

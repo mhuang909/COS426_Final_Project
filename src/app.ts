@@ -52,8 +52,10 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
   )
 
   const tilemap = new Tilemap(tileSpriteSheet.textureSource)
+
   // console.log(app.renderer.height);
   let sceneData = sceneData3;
+
   let rows = sceneData.rows;
   let cols = sceneData.cols;
   const ids = [tileSpriteSheet.textures.blank, tileSpriteSheet.textures.grass_top, tileSpriteSheet.textures.solid, tileSpriteSheet.textures.spike, tileSpriteSheet.textures.fence_left,
@@ -79,6 +81,7 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
 
   */
   let index = 0;
+
   let scaleWidth = app.renderer.width / ( cols * 16);
   let scaleHeight = app.renderer.height / (rows * 16);
   for (let i = 0; i < rows; i++){
@@ -90,11 +93,11 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
     }
   }
 
-  // tilemap.tile(tileSpriteSheet.textures.grass_top, 0, 0)
-  // tilemap.tile(tileSpriteSheet.textures.grass_top, 32, 0)
+
   tilemap.scale.x = scaleWidth;
   tilemap.scale.y = scaleHeight;
   app.stage.addChild(tilemap);
+
 
   //tilemap.addChild(player.view);
   const scene = {
@@ -109,9 +112,11 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
   //Add to stage
   app.stage.addChild(tilemap,player.view);
 
+
   app.ticker.add((ticker) => {
     player.update(ticker.deltaTime)
   })
+
   window.onresize = function (event){    
     var w = window.innerWidth;    
     var h = window.innerHeight;    
@@ -119,10 +124,8 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
     let scaleHeight = h / (rows * 16);
     tilemap.scale.x = scaleWidth;
     tilemap.scale.y = scaleHeight;
-    app.stage.addChild(tilemap);
     player.view.position.x = player.relativeX * w;
     player.view.position.y = player.relativeY * h;
-    app.stage.addChild(player.view);
-    }
+  }
 
 })();

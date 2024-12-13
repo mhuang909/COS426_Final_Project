@@ -5,6 +5,7 @@ import { atlasData } from "./assets/atlas";
 import { Platform } from "@components/objects/Platform/Platform";
 import { Tilemap } from "@pixi/tilemap";
 import { sceneData3 } from "./assets/scenes/scene3"
+import { PhysicsEngineInst } from "@components/physics/physics";
 
 
 document.body.style.margin = '0'; // Removes margin around page
@@ -59,8 +60,8 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
   let rows = sceneData.rows;
   let cols = sceneData.cols;
   const ids = [tileSpriteSheet.textures.blank, tileSpriteSheet.textures.grass_top, tileSpriteSheet.textures.solid, tileSpriteSheet.textures.spike, tileSpriteSheet.textures.fence_left,
-    tileSpriteSheet.textures.fence_mid,  tileSpriteSheet.textures.fence_right, tileSpriteSheet.textures.flower1,tileSpriteSheet.textures.flower2, tileSpriteSheet.textures.exit,
-    tileSpriteSheet.textures.left_wall, tileSpriteSheet.textures.top_wall, tileSpriteSheet.textures.right_wall, tileSpriteSheet.textures.rock
+  tileSpriteSheet.textures.fence_mid, tileSpriteSheet.textures.fence_right, tileSpriteSheet.textures.flower1, tileSpriteSheet.textures.flower2, tileSpriteSheet.textures.exit,
+  tileSpriteSheet.textures.left_wall, tileSpriteSheet.textures.top_wall, tileSpriteSheet.textures.right_wall, tileSpriteSheet.textures.rock
   ]
   /* 
   id dict:
@@ -82,10 +83,10 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
   */
   let index = 0;
 
-  let scaleWidth = app.renderer.width / ( cols * 16);
+  let scaleWidth = app.renderer.width / (cols * 16);
   let scaleHeight = app.renderer.height / (rows * 16);
-  for (let i = 0; i < rows; i++){
-    for (let j = 0; j < cols; j++){
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < cols; j++) {
       let id = sceneData.data[index];
       console.log(i);
       tilemap.tile(ids[id], j * 16, i * 16)
@@ -99,28 +100,29 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
   app.stage.addChild(tilemap);
 
 
-  //tilemap.addChild(player.view);
   const scene = {
     tiles: ["grass", "grass-top"],
     data: {
     }
   }
 
-  const platform = new Platform(3, 4, 300, 300, tilemap)
+  const platform = new Platform(0, innerHeight - 16 * scaleHeight, cols * scaleWidth * 16, 16 * scaleHeight)
 
 
   //Add to stage
-  app.stage.addChild(tilemap,player.view);
+  app.stage.addChild(tilemap, player.view, platform.view);
 
 
   app.ticker.add((ticker) => {
-    player.update(ticker.deltaTime)
+    const deltaTime = ticker.deltaTime
+    PhysicsEngineInst.update(deltaTime)
+    player.update(deltaTime)
   })
 
-  window.onresize = function (event){    
-    var w = window.innerWidth;    
-    var h = window.innerHeight;    
-    let scaleWidth = w / ( cols * 16);
+  window.onresize = function(event) {
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    let scaleWidth = w / (cols * 16);
     let scaleHeight = h / (rows * 16);
     tilemap.scale.x = scaleWidth;
     tilemap.scale.y = scaleHeight;

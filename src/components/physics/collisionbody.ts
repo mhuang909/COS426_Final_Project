@@ -44,7 +44,6 @@ export class CollisionBody {
   }
 
   onCollision(fn: (other: CollisionBody, s: side[]) => void): void {
-    console.log(fn)
     this.callbacks.push(fn)
   }
 }

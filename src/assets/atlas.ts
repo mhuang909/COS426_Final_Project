@@ -27,6 +27,6 @@ export const atlasData: SpritesheetData = {
     }
   },
   animations: {
-    player: ['player1', 'player2', 'player3', 'player4']
+    playerWalk: ['player1', 'player2', 'player3', 'player4']
   }
 }

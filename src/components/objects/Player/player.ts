@@ -1,5 +1,6 @@
 import { Controller } from "@components/controller/Controller";
-import { AnimatedSprite, Container, ObservablePoint, Ticker } from "pixi.js";
+import { Rectangle } from "@components/debug/Rectangle";
+import { AnimatedSprite, Container } from "pixi.js";
 
 type PlayerAnimations = {
   walk: AnimatedSprite
@@ -10,6 +11,7 @@ export class Player {
   dirView: Container;
   controller: Controller;
   animations: PlayerAnimations;
+  debug: Rectangle
 
   constructor(c: Controller, animations: PlayerAnimations) {
     this.view = new Container();
@@ -17,9 +19,15 @@ export class Player {
     this.controller = c;
     this.animations = animations;
 
-    this.view.addChild(this.animations.walk)
     this.view.x = window.innerWidth / 2
-    this.animations.walk.anchor.set(0.5, 0)
+    this.view.y = window.innerHeight / 2
+
+    this.view.addChild(this.animations.walk)
+
+    this.debug = new Rectangle(0, 0, this.view.width, this.view.height)
+    this.view.addChild(this.debug)
+
+    this.view.pivot.set(this.view.width / 2, this.view.height / 2)
   }
 
   update(deltaTime: number) {
@@ -35,6 +43,4 @@ export class Player {
       this.animations.walk.gotoAndStop(0)
     }
   }
-
-
 }

@@ -30,12 +30,9 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
 
   await spritesheet.parse()
 
-  const playerWalk = new AnimatedSprite(spritesheet.animations.player)
-
-  playerWalk.animationSpeed = 0.15
+  const playerWalk = new AnimatedSprite(spritesheet.animations.playerWalk)
+  playerWalk.animationSpeed = 0.2
   playerWalk.scale = 3
-  playerWalk.texture.uvs
-  // playerWalk.play();
 
   const player = new Player(controller,
     {

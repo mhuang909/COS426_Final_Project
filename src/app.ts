@@ -1,6 +1,6 @@
 import { Controller } from "@components/controller/Controller";
 import { Player } from "@components/objects/Player/player";
-import { AnimatedSprite, Application, Assets, Container, Spritesheet, Texture } from "pixi.js";
+import { AnimatedSprite, Application, Assets, Spritesheet, Texture } from "pixi.js";
 import { atlasData } from "./assets/atlas";
 import { sceneData0 } from "./assets/scenes/scene0"
 import { PhysicsEngineInst } from "@components/physics/physics";
@@ -52,16 +52,10 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
   )
 
   const scene = new Scene(sceneData0, tileSpriteSheet)
-
-
-  const scaleX = app.renderer.width / (scene.cols * 16)
-  const scaleY = app.renderer.height / (scene.rows * 16)
-  //player.view.setSize(16 * scaleX)
   player.view.x = scene.view.width / 8
   player.view.y = scene.view.height / 2
 
-  scene.view.scale.x = scaleX
-  scene.view.scale.y = scaleY
+
 
   scene.view.addChild(player.view)
 
@@ -70,26 +64,17 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
 
 
   app.ticker.add((ticker) => {
+    // Resize the scene
+    const scaleX = app.renderer.width / (scene.cols * 16)
+    const scaleY = app.renderer.height / (scene.rows * 16)
+
+    scene.view.scale.x = scaleX
+    scene.view.scale.y = scaleY
+
+    // Apply updates
     const deltaTime = ticker.deltaTime
     PhysicsEngineInst.update(deltaTime)
     player.update(deltaTime)
   })
-
-  //window.onresize = function(event) {
-  //  var w = window.innerWidth;
-  //  var h = window.innerHeight;
-  //  let scaleWidth = w / (cols * 16);
-  //  let scaleHeight = h / (rows * 16);
-  //  tilemap.scale.x = scaleWidth;
-  //  tilemap.scale.y = scaleHeight;
-  //  platform.view.scale.x = scaleWidth;
-  //  platform.view.scale.y = scaleHeight
-  //  player.view.position.x = player.relativeX * w;
-  //  player.view.position.y = player.relativeY * h;
-  //  app.stage.children.forEach(c => {
-  //    c.scale.x = scaleWidth;
-  //    c.scale.y = scaleHeight;
-  //  })
-  //}
 
 })();

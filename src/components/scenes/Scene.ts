@@ -1,6 +1,6 @@
 import { Platform } from "@components/objects/Platform/Platform";
 import { Tilemap } from "@pixi/tilemap";
-import { Container, Spritesheet, SpritesheetData, TextureSource } from "pixi.js";
+import { Container, Spritesheet, SpritesheetData } from "pixi.js";
 
 
 export type SceneData = {

@@ -1,9 +1,7 @@
 import { Controller } from "@components/controller/Controller";
-import { Rectangle } from "@components/debug/Rectangle";
 import { CollisionBody } from "@components/physics/collisionbody";
 import { PhysicsBody } from "@components/physics/physics";
 import { AnimatedSprite, Container } from "pixi.js";
-import { Vector2 } from "three";
 
 type PlayerAnimations = {
   walk: AnimatedSprite

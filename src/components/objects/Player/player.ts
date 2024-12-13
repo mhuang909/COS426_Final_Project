@@ -3,6 +3,7 @@ import { CollisionBody } from "@components/physics/collisionbody";
 import { PhysicsBody } from "@components/physics/physics";
 import { AnimatedSprite, Container } from "pixi.js";
 
+
 export type PlayerAnimations = {
   walk: AnimatedSprite
 }
@@ -21,6 +22,7 @@ export class Player {
   jumpStart: number
   jumpEnd: boolean
 
+
   constructor(c: Controller, animations: PlayerAnimations) {
     this.view = new Container();
 
@@ -32,12 +34,12 @@ export class Player {
 
     this.view.pivot.set(this.view.width / 2, this.view.height / 2)
 
-    this.collisionBody = new CollisionBody(this.view.width / 4, this.view.height / 2)
+    this.collisionBody = new CollisionBody(this.view.width / 4, this.view.height / 2, 0)
     this.physicsBody = new PhysicsBody(this.view, this.collisionBody, 7, 0.2)
     this.collisionBody.view.x = this.view.width / 2 - this.collisionBody.view.width / 2
     this.collisionBody.view.y = this.view.height - this.collisionBody.view.height
 
-    this.collisionBody.onCollision((_, sides) => {
+    this.collisionBody.onCollision((o, sides) => {
       if (sides.includes("bottom")) {
         this.jumpEnd = true
       }
@@ -88,5 +90,6 @@ export class Player {
       }
     }
   }
+
 }
 

@@ -9,7 +9,7 @@ export const sceneData0: SceneData = {
   cols: 32,
   player: {
     x: 5.5,
-    y: 14,
+    y: 13,
     Player: async () => {
       const characterSpriteSheet = new Spritesheet(
         Texture.from(atlasData.characters.meta.image),
@@ -55,4 +55,9 @@ export const sceneData0: SceneData = {
     { x: 20, y: 14, w: 4, h: 1 },
     { x: 26, y: 14, w: 6, h: 1 },
   ],
+  spikes: [
+    { x: 12, y: 14, w: 2, h: 1 },
+    { x: 18, y: 14, w: 2, h: 1 },
+    { x: 24, y: 14, w: 2, h: 1 },
+  ]
 }

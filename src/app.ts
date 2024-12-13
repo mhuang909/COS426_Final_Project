@@ -33,7 +33,6 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
   )
   await tileSpriteSheet.parse()
 
-
   const scenes = Scenes(tileSpriteSheet)
   const sceneManager = new SceneManager()
   for (const { id, scene } of scenes) {

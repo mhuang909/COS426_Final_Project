@@ -30,12 +30,6 @@ export class Player {
     this.controller = c;
     this.animations = animations;
 
-    this.view.x = window.innerWidth / 2
-    this.view.y = window.innerHeight / 2
-
-    this.relativeX = this.view.position.x / window.innerWidth;
-    this.relativeY = this.view.position.y / window.innerHeight;
-
     this.view.addChild(this.animations.walk)
 
     this.debug = new Rectangle(0, 0, this.view.width, this.view.height)
@@ -64,10 +58,10 @@ export class Player {
 
     if (this.controller.keys['right'].pressed) {
       this.animations.walk.play()
-      this.view.scale.x = 1
+      this.view.scale.x = Math.abs(this.view.scale.x)
       this.physicsBody.speed.setX(6)
     } else if (this.controller.keys['left'].pressed) {
-      this.view.scale.x = -1
+      this.view.scale.x = -Math.abs(this.view.scale.x)
       this.physicsBody.speed.setX(-6)
       this.animations.walk.play()
     } else {
@@ -84,7 +78,7 @@ export class Player {
       }
 
       if (!this.jumpEnd) {
-        this.physicsBody.speed.y -= 4
+        this.physicsBody.speed.y -= 20 * deltaTime
       }
 
       console.log(this.jumpStart - this.collisionBody.maxY())

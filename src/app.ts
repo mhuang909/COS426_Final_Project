@@ -1,11 +1,13 @@
 import { Controller } from "@components/controller/Controller";
 import { Player } from "@components/objects/Player/player";
-import { AnimatedSprite, Application, Assets, Spritesheet, Texture } from "pixi.js";
+import { AnimatedSprite, Application, Assets, Container, Spritesheet, Texture } from "pixi.js";
 import { atlasData } from "./assets/atlas";
 import { Platform } from "@components/objects/Platform/Platform";
 import { Tilemap } from "@pixi/tilemap";
-import { sceneData3 } from "./assets/scenes/scene3"
+import { sceneData1 } from "./assets/scenes/scene1"
 import { PhysicsEngineInst } from "@components/physics/physics";
+import { CollisionBody } from "@components/physics/collisionbody";
+import { Scene } from "@components/scenes/Scene";
 
 
 document.body.style.margin = '0'; // Removes margin around page
@@ -52,65 +54,24 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
     }
   )
 
-  const tilemap = new Tilemap(tileSpriteSheet.textureSource)
-
-  // console.log(app.renderer.height);
-  let sceneData = sceneData3;
-
-  let rows = sceneData.rows;
-  let cols = sceneData.cols;
-  const ids = [tileSpriteSheet.textures.blank, tileSpriteSheet.textures.grass_top, tileSpriteSheet.textures.solid, tileSpriteSheet.textures.spike, tileSpriteSheet.textures.fence_left,
-  tileSpriteSheet.textures.fence_mid, tileSpriteSheet.textures.fence_right, tileSpriteSheet.textures.flower1, tileSpriteSheet.textures.flower2, tileSpriteSheet.textures.exit,
-  tileSpriteSheet.textures.left_wall, tileSpriteSheet.textures.top_wall, tileSpriteSheet.textures.right_wall, tileSpriteSheet.textures.rock
-  ]
-  /* 
-  id dict:
-  0: tileSpriteSheet.textures.blank,
-  1: tileSpriteSheet.textures.grass_top
-  2: tileSpriteSheet.textures.solid
-  3: tileSpriteSheet.textures.spike
-  4: tileSpriteSheet.textures.fence_left
-  5: tileSpriteSheet.textures.fence_mid
-  6: tileSpriteSheet.textures.fence_right
-  7: tileSpriteSheet.textures.flower1
-  8: tileSpriteSheet.textures.flower2
-  9: tileSpriteSheet.textures.exit
-  10: tileSpriteSheet.textures.left_wall
-  11: tileSpriteSheet.textures.top_wall
-  12: tileSpriteSheet.textures.right_wall
-  13: tileSpriteSheet.textures.rock
-
-  */
-  let index = 0;
-
-  let scaleWidth = app.renderer.width / (cols * 16);
-  let scaleHeight = app.renderer.height / (rows * 16);
-  for (let i = 0; i < rows; i++) {
-    for (let j = 0; j < cols; j++) {
-      let id = sceneData.data[index];
-      console.log(i);
-      tilemap.tile(ids[id], j * 16, i * 16)
-      index++;
-    }
-  }
 
 
-  tilemap.scale.x = scaleWidth;
-  tilemap.scale.y = scaleHeight;
-  app.stage.addChild(tilemap);
+  const scene = new Scene(sceneData1, tileSpriteSheet)
 
 
-  const scene = {
-    tiles: ["grass", "grass-top"],
-    data: {
-    }
-  }
+  const scaleX = app.renderer.width / (scene.cols * 16)
+  const scaleY = app.renderer.height / (scene.rows * 16)
+  player.view.setSize(16 * scaleX)
+  player.view.x = scene.view.width / 8
+  player.view.y = scene.view.height / 2
 
-  const platform = new Platform(0, innerHeight - 16 * scaleHeight, cols * scaleWidth * 16, 16 * scaleHeight)
+  scene.view.scale.x = scaleX
+  scene.view.scale.y = scaleY
 
+  scene.view.addChild(player.view)
 
   //Add to stage
-  app.stage.addChild(tilemap, player.view, platform.view);
+  app.stage.addChild(scene.view);
 
 
   app.ticker.add((ticker) => {
@@ -119,15 +80,21 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
     player.update(deltaTime)
   })
 
-  window.onresize = function(event) {
-    var w = window.innerWidth;
-    var h = window.innerHeight;
-    let scaleWidth = w / (cols * 16);
-    let scaleHeight = h / (rows * 16);
-    tilemap.scale.x = scaleWidth;
-    tilemap.scale.y = scaleHeight;
-    player.view.position.x = player.relativeX * w;
-    player.view.position.y = player.relativeY * h;
-  }
+  //window.onresize = function(event) {
+  //  var w = window.innerWidth;
+  //  var h = window.innerHeight;
+  //  let scaleWidth = w / (cols * 16);
+  //  let scaleHeight = h / (rows * 16);
+  //  tilemap.scale.x = scaleWidth;
+  //  tilemap.scale.y = scaleHeight;
+  //  platform.view.scale.x = scaleWidth;
+  //  platform.view.scale.y = scaleHeight
+  //  player.view.position.x = player.relativeX * w;
+  //  player.view.position.y = player.relativeY * h;
+  //  app.stage.children.forEach(c => {
+  //    c.scale.x = scaleWidth;
+  //    c.scale.y = scaleHeight;
+  //  })
+  //}
 
 })();

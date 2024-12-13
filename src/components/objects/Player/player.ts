@@ -1,6 +1,6 @@
 import { Controller } from "@components/controller/Controller";
 import { CollisionBody } from "@components/physics/collisionbody";
-import { PhysicsBody } from "@components/physics/physics";
+import { PhysicsBody, PhysicsEngine } from "@components/physics/physics";
 import { AnimatedSprite, Container } from "pixi.js";
 
 
@@ -23,7 +23,7 @@ export class Player {
   jumpEnd: boolean
 
 
-  constructor(c: Controller, animations: PlayerAnimations) {
+  constructor(c: Controller, animations: PlayerAnimations, engine: PhysicsEngine) {
     this.view = new Container();
 
     this.controller = c;
@@ -34,8 +34,8 @@ export class Player {
 
     this.view.pivot.set(this.view.width / 2, this.view.height / 2)
 
-    this.collisionBody = new CollisionBody(this.view.width / 4, this.view.height / 2, 0)
-    this.physicsBody = new PhysicsBody(this.view, this.collisionBody, 7, 0.2)
+    this.collisionBody = new CollisionBody(engine, this.view.width / 4, this.view.height / 2, 0)
+    this.physicsBody = new PhysicsBody(engine, this.view, this.collisionBody, 7, 0.2)
     this.collisionBody.view.x = this.view.width / 2 - this.collisionBody.view.width / 2
     this.collisionBody.view.y = this.view.height - this.collisionBody.view.height
 

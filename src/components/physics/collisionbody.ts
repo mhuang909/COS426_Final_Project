@@ -1,6 +1,6 @@
 import { Container } from "pixi.js";
-import { PhysicsEngineInst } from "./physics";
 import { Rectangle } from "@components/debug/Rectangle";
+import { PhysicsEngine } from "./physics";
 
 type side = 'top' | 'bottom' | 'left' | 'right' | 'none'
 
@@ -18,8 +18,7 @@ export class CollisionBody {
   callbacks: collisonCallbackFn[]
   trigger: boolean
 
-  constructor(w: number, h: number, tile_type: number, trigger?: boolean) {
-    PhysicsEngineInst.colliders.push(this)
+  constructor(engine: PhysicsEngine, w: number, h: number, tile_type: number, trigger?: boolean) {
 
     this.view = new Container()
     this.view.width = w
@@ -28,6 +27,7 @@ export class CollisionBody {
     this.view.addChild(new Rectangle(0, 0, w, h, "#00FF00"))
     this.trigger = trigger ?? false;
     this.callbacks = [];
+    engine.colliders.push(this)
   }
 
   isColliding(other: CollisionBody): side[] {

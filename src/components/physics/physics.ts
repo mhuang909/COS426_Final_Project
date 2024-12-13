@@ -12,8 +12,8 @@ export class PhysicsBody {
   collision: CollisionBody
   onGround: boolean
 
-  constructor(v: Container, collision: CollisionBody, m: number, g?: number) {
-    PhysicsEngineInst.bodies.push(this)
+  constructor(engine: PhysicsEngine, v: Container, collision: CollisionBody, m: number, g?: number) {
+    engine.bodies.push(this)
 
     this.view = v;
     this.collision = collision;
@@ -84,7 +84,7 @@ export class PhysicsBody {
   }
 }
 
-class PhysicsEngine {
+export class PhysicsEngine {
   bodies: PhysicsBody[]
   colliders: CollisionBody[]
 
@@ -99,20 +99,15 @@ class PhysicsEngine {
       body.update(deltaTime)
     })
 
-    this.colliders.forEach((b) => {
-      this.colliders.forEach((other) => {
-        if (other !== b) {
-          const sides = b.isColliding(other)
-          if (sides.length > 0) {
-            b.collisionCallback(other, sides)
-          }
-        }
-      })
+    this.colliders.forEach((a, i) => {
+      for (let t = i + 1; t < this.colliders.length; t++) {
+        const b = this.colliders[t]
+        const sidesA = a.isColliding(b)
+        const sidesB = b.isColliding(a)
+        if (sidesA.length > 0) a.collisionCallback(b, sidesA)
+        if (sidesB.length > 0) b.collisionCallback(a, sidesB)
+      }
     })
   }
-
-
 }
-
-export const PhysicsEngineInst = new PhysicsEngine()
 

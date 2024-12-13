@@ -2,7 +2,6 @@ import { controller } from "@components/controller/Controller";
 import { Player } from "@components/objects/Player/player";
 import { AnimatedSprite, Application, Assets, Spritesheet, Texture } from "pixi.js";
 import { atlasData } from "./assets/atlas";
-import { PhysicsEngineInst } from "@components/physics/physics";
 import { Scenes } from "@components/scenes/Scenes";
 import { SceneManager } from "@components/scenes/SceneManager";
 
@@ -58,7 +57,6 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
 
     // Apply updates
     const deltaTime = ticker.deltaTime
-    PhysicsEngineInst.update(deltaTime)
     sceneManager.update(deltaTime)
   })
 

@@ -8,9 +8,9 @@ export const sceneData0: SceneData = {
   rows: 16,
   cols: 32,
   player: {
-    x: 5.5,
-    y: 13,
-    Player: async () => {
+    x: 3.5,
+    y: 12.8,
+    Player: async (scene) => {
       const characterSpriteSheet = new Spritesheet(
         Texture.from(atlasData.characters.meta.image),
         atlasData.characters
@@ -24,7 +24,7 @@ export const sceneData0: SceneData = {
         walk: playerWalk,
       }
 
-      return new Player(controller, animations)
+      return new Player(controller, animations, scene.physicsEngine)
     }
   },
   tiles:

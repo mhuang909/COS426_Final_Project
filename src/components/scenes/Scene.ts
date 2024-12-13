@@ -1,5 +1,6 @@
 import { Platform } from "@components/objects/Platform/Platform";
 import { Player } from "@components/objects/Player/player";
+import { PhysicsEngine } from "@components/physics/physics";
 import { Tilemap } from "@pixi/tilemap";
 import { Container, Spritesheet, SpritesheetData } from "pixi.js";
 
@@ -8,7 +9,7 @@ export type SceneData = {
   rows: number,
   cols: number,
   player: {
-    Player: () => Promise<Player>,
+    Player: (scene: Scene) => Promise<Player>,
     x: number,
     y: number
   },
@@ -25,12 +26,15 @@ export class Scene {
   cols: number
   rows: number
   player: Player
+  physicsEngine: PhysicsEngine
 
   constructor(data: SceneData, spritesheet: Spritesheet<SpritesheetData>) {
     this.view = new Container();
     this.tilemap = new Tilemap(spritesheet.textureSource)
     this.cols = data.cols
     this.rows = data.rows
+
+    this.physicsEngine = new PhysicsEngine()
 
     this.render(data, spritesheet)
     this.view.addChild(this.tilemap)
@@ -39,7 +43,7 @@ export class Scene {
   }
 
   async init(data: SceneData) {
-    this.player = await data.player.Player()
+    this.player = await data.player.Player(this)
     this.player.view.x = data.player.x * 16
     this.player.view.y = data.player.y * 16
 
@@ -81,12 +85,13 @@ export class Scene {
   }
 
   buildPlatform(x: number, y: number, w: number, h: number, tile_type: number) {
-    const platform = new Platform(x, y, w, h, tile_type)
+    const platform = new Platform(this.physicsEngine, x, y, w, h, tile_type)
     this.view.addChild(platform.view)
 
   }
 
   update(deltaTime: number) {
+    this.physicsEngine.update(deltaTime)
     this.player.update(deltaTime)
   }
 }

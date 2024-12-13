@@ -2,6 +2,8 @@ import { Controller } from "@components/controller/Controller";
 import { Player } from "@components/objects/Player/player";
 import { AnimatedSprite, Application, Assets, Spritesheet, Texture } from "pixi.js";
 import { atlasData } from "./assets/atlas";
+import { Platform } from "@components/objects/Platform/Platform";
+import { Tilemap } from "@pixi/tilemap";
 
 document.body.style.margin = '0'; // Removes margin around page
 document.body.style.overflow = 'hidden'; // Fix scrolling
@@ -19,18 +21,25 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
   // Create a new Sprite from an image path
   const controller = new Controller();
 
-  Assets.add({ alias: 'characters', src: atlasData.meta.image })
-  const textures = await Assets.load({ alias: 'characters' });
-  textures.source.scaleMode = 'nearest'
+  Assets.add({ alias: 'characters', src: atlasData.characters.meta.image })
+  Assets.add({ alias: 'tiles', src: atlasData.tiles.meta.image })
+  const textures = await Assets.load([{ alias: 'characters' }, { alias: 'tiles' }]);
 
-  const spritesheet = new Spritesheet(
-    Texture.from(atlasData.meta.image),
-    atlasData
+  textures.characters.source.scaleMode = 'nearest'
+  textures.tiles.source.scaleMode = 'nearest'
+
+  const characterSpriteSheet = new Spritesheet(
+    Texture.from(atlasData.characters.meta.image),
+    atlasData.characters
   )
+  const tileSpriteSheet = new Spritesheet(
+    Texture.from(atlasData.tiles.meta.image),
+    atlasData.tiles
+  )
+  await characterSpriteSheet.parse()
+  await tileSpriteSheet.parse()
 
-  await spritesheet.parse()
-
-  const playerWalk = new AnimatedSprite(spritesheet.animations.playerWalk)
+  const playerWalk = new AnimatedSprite(characterSpriteSheet.animations.playerWalk)
   playerWalk.animationSpeed = 0.2
   playerWalk.scale = 3
 
@@ -39,8 +48,24 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
       walk: playerWalk,
     }
   )
-  // Add to stage
-  app.stage.addChild(player.view);
+
+  const tilemap = new Tilemap(tileSpriteSheet.textureSource)
+  console.log(tileSpriteSheet.textures.grass_top)
+  tilemap.tile(tileSpriteSheet.textures.grass_top, 32, 0)
+  tilemap.tile(tileSpriteSheet.textures.grass_top, 32, 0)
+  tilemap.scale = 8
+
+
+  const scene = {
+    tiles: ["grass", "grass-top"],
+    data: {
+    }
+  }
+
+  const platform = new Platform(3, 4, 300, 300, tilemap)
+
+  //Add to stage
+  app.stage.addChild(player.view, tilemap, platform.view);
 
   app.ticker.add((ticker) => {
     player.update(ticker.deltaTime)

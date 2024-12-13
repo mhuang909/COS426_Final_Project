@@ -46,5 +46,8 @@ export const sceneData1: SceneData = {
     { x: 26, y: 10, w: 2, h: 1 },
     { x: 16, y: 12, w: 1, h: 1 },
     { x: 30, y: 14, w: 2, h: 1 },
+  ], 
+  spikes: [
+    {x:12, y:14, w:18, h:1}
   ]
 }

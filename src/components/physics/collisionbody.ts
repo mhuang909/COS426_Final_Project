@@ -7,16 +7,22 @@ type side = 'top' | 'bottom' | 'left' | 'right' | 'none'
 export class CollisionBody {
 
   view: Container
+  tile_type: number
+  /* 0: player
+  1: platform
+  2: spike
+  */
 
   callbacks: ((other: CollisionBody, s: side[]) => void)[]
   trigger: boolean
 
-  constructor(w: number, h: number, trigger?: boolean) {
+  constructor(w: number, h: number, tile_type: number, trigger?: boolean) {
     PhysicsEngineInst.colliders.push(this)
 
     this.view = new Container()
     this.view.width = w
     this.view.height = h
+    this.tile_type = tile_type;
     this.view.addChild(new Rectangle(0, 0, w, h, "#00FF00"))
     this.trigger = trigger ?? false;
     this.callbacks = [];

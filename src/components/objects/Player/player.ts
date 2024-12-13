@@ -1,7 +1,8 @@
 import { Controller } from "@components/controller/Controller";
 import { CollisionBody } from "@components/physics/collisionbody";
 import { PhysicsBody } from "@components/physics/physics";
-import { AnimatedSprite, Container } from "pixi.js";
+import { AnimatedSprite, Container} from "pixi.js";
+
 
 type PlayerAnimations = {
   walk: AnimatedSprite
@@ -21,7 +22,10 @@ export class Player {
   jumpStart: number
   jumpEnd: boolean
 
-  constructor(c: Controller, animations: PlayerAnimations) {
+
+  startingPoint: {x: number, y: number}
+
+  constructor(c: Controller, animations: PlayerAnimations, starting: {x: number, y: number}) {
     this.view = new Container();
 
     this.controller = c;
@@ -31,13 +35,21 @@ export class Player {
 
 
     this.view.pivot.set(this.view.width / 2, this.view.height / 2)
+    this.startingPoint = starting;
+    this.view.x = starting.x;
+    this.view.y = starting.y;
 
-    this.collisionBody = new CollisionBody(this.view.width / 4, this.view.height / 2)
+    this.collisionBody = new CollisionBody(this.view.width / 4, this.view.height / 2, 0)
     this.physicsBody = new PhysicsBody(this.view, this.collisionBody, 7, 0.2)
     this.collisionBody.view.x = this.view.width / 2 - this.collisionBody.view.width / 2
     this.collisionBody.view.y = this.view.height - this.collisionBody.view.height
 
-    this.collisionBody.onCollision((_, sides) => {
+    this.collisionBody.onCollision((o, sides) => {
+      if (o.tile_type === 2){
+        this.view.x = starting.x;
+        this.view.y = starting.y;
+        return;
+      }
       if (sides.includes("bottom")) {
         this.jumpEnd = true
       }

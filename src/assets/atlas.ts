@@ -113,6 +113,11 @@ export const atlasData: Record<sheet, SpritesheetData> = {
         sourceSize: { w: 16, h: 16 },
         spriteSourceSize: { w: 6, h: 16, x: 0, y: 0 }
       },
+      blank_dot: {
+        frame: { x: 16 * 7, y: 16, h: 16, w: 16 },
+        sourceSize: { w: 16, h: 16 },
+        spriteSourceSize: { w: 6, h: 16, x: 0, y: 0 }
+      },
 
     }
   }

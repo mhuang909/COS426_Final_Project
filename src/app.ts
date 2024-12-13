@@ -2,7 +2,7 @@ import { Controller } from "@components/controller/Controller";
 import { Player } from "@components/objects/Player/player";
 import { AnimatedSprite, Application, Assets, Spritesheet, Texture } from "pixi.js";
 import { atlasData } from "./assets/atlas";
-import { sceneData0 } from "./assets/scenes/scene0"
+import { sceneData3} from "./assets/scenes/scene3"
 import { PhysicsEngineInst } from "@components/physics/physics";
 import { Scene } from "@components/scenes/Scene";
 
@@ -44,16 +44,17 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
   const playerWalk = new AnimatedSprite(characterSpriteSheet.animations.playerWalk)
   playerWalk.animationSpeed = 0.2
   playerWalk.scale = 1
+  const scene = new Scene(sceneData3, tileSpriteSheet)
 
   const player = new Player(controller,
     {
       walk: playerWalk,
+    }, 
+    { x: scene.view.width / 8,
+      y: scene.view.height / 2
     }
   )
 
-  const scene = new Scene(sceneData0, tileSpriteSheet)
-  player.view.x = scene.view.width / 8
-  player.view.y = scene.view.height / 2
 
 
 

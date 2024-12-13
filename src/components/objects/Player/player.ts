@@ -1,5 +1,7 @@
 import { Controller } from "@components/controller/Controller";
 import { Rectangle } from "@components/debug/Rectangle";
+import { CollisionBody } from "@components/physics/collisionbody";
+import { PhysicsBody } from "@components/physics/physics";
 import { AnimatedSprite, Container } from "pixi.js";
 
 type PlayerAnimations = {
@@ -14,6 +16,8 @@ export class Player {
   debug: Rectangle;
   relativeX: number;
   relativeY: number;
+  physicsBody: PhysicsBody;
+  collisionBody: CollisionBody;
 
   constructor(c: Controller, animations: PlayerAnimations) {
     this.view = new Container();
@@ -33,6 +37,15 @@ export class Player {
     this.view.addChild(this.debug)
 
     this.view.pivot.set(this.view.width / 2, this.view.height / 2)
+
+    this.physicsBody = new PhysicsBody(this.view, 50)
+    this.collisionBody = new CollisionBody(this.view.width / 4, this.view.height / 2)
+    this.view.addChild(this.collisionBody.view)
+    this.collisionBody.view.x = this.view.width / 2 - this.collisionBody.view.width / 2
+    this.collisionBody.view.y = this.view.height - this.collisionBody.view.height
+    this.collisionBody.onCollision((o) => {
+      console.log("Colliding")
+    })
   }
 
   update(deltaTime: number) {

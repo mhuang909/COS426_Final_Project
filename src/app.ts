@@ -5,6 +5,7 @@ import { atlasData } from "./assets/atlas";
 import { Platform } from "@components/objects/Platform/Platform";
 import { Tilemap } from "@pixi/tilemap";
 import { sceneData } from "./assets/scene"
+import { PhysicsEngineInst } from "@components/physics/physics";
 
 
 document.body.style.margin = '0'; // Removes margin around page
@@ -69,6 +70,7 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
     }
   }
 
+
   // tilemap.tile(tileSpriteSheet.textures.grass_top, 0, 0)
   // tilemap.tile(tileSpriteSheet.textures.grass_top, 32, 0)
   tilemap.scale.x = scaleWidth;
@@ -76,19 +78,24 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
 
   //tilemap.addChild(player.view);
   const scene = {
-    tiles: ["grass", "grass-top"],
-    data: {
-    }
+    tiles: [
+      ["grass-top"],
+      [],
+      []
+    ]
+
   }
 
-  const platform = new Platform(3, 4, 300, 300, tilemap)
+  const platform = new Platform(3, 4, 120, 120, tilemap)
 
 
   //Add to stage
   app.stage.addChild(tilemap, player.view);
 
   app.ticker.add((ticker) => {
-    player.update(ticker.deltaTime)
+    const deltaTime = ticker.deltaTime;
+    PhysicsEngineInst.update(deltaTime);
+    player.update(deltaTime)
   })
   window.onresize = function (event){    
     var w = window.innerWidth;    

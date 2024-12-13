@@ -44,7 +44,7 @@ export const atlasData: Record<sheet, SpritesheetData> = {
     },
     frames: {
       grass_top: {
-        frame: { x: 128, y: 0, h: 16, w: 16 },
+        frame: { x: 16 * 8, y: 0, h: 16, w: 16 },
         sourceSize: { w: 16, h: 16 },
         spriteSourceSize: { w: 6, h: 16, x: 0, y: 0 }
       }

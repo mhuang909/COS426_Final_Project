@@ -17,7 +17,6 @@ export class Scene {
   rows: number
 
   constructor(data: SceneData, spritesheet: Spritesheet<SpritesheetData>) {
-    console.log(spritesheet)
     this.view = new Container();
     this.tilemap = new Tilemap(spritesheet.textureSource)
     this.cols = data.cols

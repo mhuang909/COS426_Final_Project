@@ -38,7 +38,7 @@ export class Player {
     this.view.pivot.set(this.view.width / 2, this.view.height / 2)
 
     this.collisionBody = new CollisionBody(this.view.width / 4, this.view.height / 2)
-    this.physicsBody = new PhysicsBody(this.view, this.collisionBody, 7, 3)
+    this.physicsBody = new PhysicsBody(this.view, this.collisionBody, 7, 0.2)
     this.collisionBody.view.x = this.view.width / 2 - this.collisionBody.view.width / 2
     this.collisionBody.view.y = this.view.height - this.collisionBody.view.height
 
@@ -49,7 +49,7 @@ export class Player {
     })
 
     this.jumping = false;
-    this.jumpHeight = 128;
+    this.jumpHeight = this.view.height / 2;
   }
 
   update(deltaTime: number) {
@@ -59,10 +59,10 @@ export class Player {
     if (this.controller.keys['right'].pressed) {
       this.animations.walk.play()
       this.view.scale.x = Math.abs(this.view.scale.x)
-      this.physicsBody.speed.setX(6)
+      this.physicsBody.speed.setX(2)
     } else if (this.controller.keys['left'].pressed) {
       this.view.scale.x = -Math.abs(this.view.scale.x)
-      this.physicsBody.speed.setX(-6)
+      this.physicsBody.speed.setX(-2)
       this.animations.walk.play()
     } else {
       this.physicsBody.speed.setX(0)
@@ -74,15 +74,14 @@ export class Player {
     if (this.controller.keys.space.pressed && (this.physicsBody.onGround || this.jumping)) {
       if (!this.jumping) {
         this.jumping = true
-        this.jumpStart = this.collisionBody.maxY()
+        this.jumpStart = this.view.y
       }
 
       if (!this.jumpEnd) {
-        this.physicsBody.speed.y -= 20 * deltaTime
+        this.physicsBody.speed.y -= 1 * deltaTime
       }
 
-      console.log(this.jumpStart - this.collisionBody.maxY())
-      if (this.jumpStart - this.collisionBody.maxY() >= this.jumpHeight) {
+      if (this.jumpStart - this.view.y >= this.jumpHeight) {
         this.jumpEnd = true
       }
     }

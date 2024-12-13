@@ -46,7 +46,7 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
 
   const playerWalk = new AnimatedSprite(characterSpriteSheet.animations.playerWalk)
   playerWalk.animationSpeed = 0.2
-  playerWalk.scale = 3
+  playerWalk.scale = 1
 
   const player = new Player(controller,
     {
@@ -54,14 +54,12 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
     }
   )
 
-
-
   const scene = new Scene(sceneData1, tileSpriteSheet)
 
 
   const scaleX = app.renderer.width / (scene.cols * 16)
   const scaleY = app.renderer.height / (scene.rows * 16)
-  player.view.setSize(16 * scaleX)
+  //player.view.setSize(16 * scaleX)
   player.view.x = scene.view.width / 8
   player.view.y = scene.view.height / 2
 

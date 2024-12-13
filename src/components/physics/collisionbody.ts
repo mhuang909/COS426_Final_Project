@@ -23,14 +23,18 @@ export class CollisionBody {
   }
 
   isColliding(other: CollisionBody): side[] {
-    if (this.maxX() <= other.minX() || this.minX() >= other.maxX() ||
-      this.maxY() <= other.minY() || this.minY() >= other.maxY()) return []
+    if (this.maxX() + 4 <= other.minX() || this.minX() - 4 >= other.maxX() ||
+      this.maxY() + 16 <= other.minY() || this.minY() - 16 >= other.maxY()) return []
+
+    const pcTopBottom = ((this.maxX() > other.maxX() ? other.maxX() : this.maxX()) - (this.minX() < other.minX() ? other.minX() : this.minX())) / (this.maxX() - this.minX())
+    const pcLeftRight = ((this.maxY() > other.maxY() ? other.maxY() : this.maxY()) - (this.minY() < other.minY() ? other.minY() : this.minY())) / (this.maxY() - this.minY())
+
 
     const sides = []
-    if (Math.abs(this.maxX() - other.minX()) < 10) sides.push("left")
-    if (Math.abs(this.minX() - other.maxX()) < 10) sides.push("right")
-    if (Math.abs(this.maxY() - other.minY()) < 10) sides.push("top")
-    if (Math.abs(this.minY() - other.maxY()) < 10) sides.push("bottom")
+    if (this.maxX() > other.minX() && this.minX() < other.minX()) sides.push("left")
+    if (this.minX() < other.maxX() && this.maxX() > other.maxX()) sides.push("right")
+    if (this.maxY() > other.minY() && this.minY() < other.minY() && pcTopBottom > 0.3) sides.push("top")
+    if (this.minY() < other.maxY() && this.maxY() > other.maxY() && pcTopBottom > 0.3) sides.push("bottom")
     return sides;
   }
 

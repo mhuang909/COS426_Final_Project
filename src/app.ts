@@ -4,8 +4,7 @@ import { AnimatedSprite, Application, Assets, Spritesheet, Texture } from "pixi.
 import { atlasData } from "./assets/atlas";
 import { Platform } from "@components/objects/Platform/Platform";
 import { Tilemap } from "@pixi/tilemap";
-import { sceneData } from "./assets/scene"
-import { PhysicsEngineInst } from "@components/physics/physics";
+import { sceneData3 } from "./assets/scenes/scene3"
 
 
 document.body.style.margin = '0'; // Removes margin around page
@@ -54,54 +53,70 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
 
   const tilemap = new Tilemap(tileSpriteSheet.textureSource)
   // console.log(app.renderer.height);
-
+  let sceneData = sceneData3;
   let rows = sceneData.rows;
   let cols = sceneData.cols;
-  const ids = [tileSpriteSheet.textures.grass_top]
-  let index = 0;
-  let scaleWidth = app.renderer.width / ( 8 * 16);
-  let scaleHeight = app.renderer.height / (8 * 16);
+  const ids = [tileSpriteSheet.textures.blank, tileSpriteSheet.textures.grass_top, tileSpriteSheet.textures.solid, tileSpriteSheet.textures.spike, tileSpriteSheet.textures.fence_left,
+    tileSpriteSheet.textures.fence_mid,  tileSpriteSheet.textures.fence_right, tileSpriteSheet.textures.flower1,tileSpriteSheet.textures.flower2, tileSpriteSheet.textures.exit,
+    tileSpriteSheet.textures.left_wall, tileSpriteSheet.textures.top_wall, tileSpriteSheet.textures.right_wall, tileSpriteSheet.textures.rock
+  ]
+  /* 
+  id dict:
+  0: tileSpriteSheet.textures.blank,
+  1: tileSpriteSheet.textures.grass_top
+  2: tileSpriteSheet.textures.solid
+  3: tileSpriteSheet.textures.spike
+  4: tileSpriteSheet.textures.fence_left
+  5: tileSpriteSheet.textures.fence_mid
+  6: tileSpriteSheet.textures.fence_right
+  7: tileSpriteSheet.textures.flower1
+  8: tileSpriteSheet.textures.flower2
+  9: tileSpriteSheet.textures.exit
+  10: tileSpriteSheet.textures.left_wall
+  11: tileSpriteSheet.textures.top_wall
+  12: tileSpriteSheet.textures.right_wall
+  13: tileSpriteSheet.textures.rock
 
+  */
+  let index = 0;
+  let scaleWidth = app.renderer.width / ( cols * 16);
+  let scaleHeight = app.renderer.height / (rows * 16);
   for (let i = 0; i < rows; i++){
     for (let j = 0; j < cols; j++){
       let id = sceneData.data[index];
-      tilemap.tile(ids[id], i * 16, j * 16)
+      console.log(i);
+      tilemap.tile(ids[id], j * 16, i * 16)
       index++;
     }
   }
-
 
   // tilemap.tile(tileSpriteSheet.textures.grass_top, 0, 0)
   // tilemap.tile(tileSpriteSheet.textures.grass_top, 32, 0)
   tilemap.scale.x = scaleWidth;
   tilemap.scale.y = scaleHeight;
+  app.stage.addChild(tilemap);
 
   //tilemap.addChild(player.view);
   const scene = {
-    tiles: [
-      ["grass-top"],
-      [],
-      []
-    ]
-
+    tiles: ["grass", "grass-top"],
+    data: {
+    }
   }
 
-  const platform = new Platform(3, 4, 120, 120, tilemap)
+  const platform = new Platform(3, 4, 300, 300, tilemap)
 
 
   //Add to stage
-  app.stage.addChild(tilemap, player.view);
+  app.stage.addChild(tilemap,player.view);
 
   app.ticker.add((ticker) => {
-    const deltaTime = ticker.deltaTime;
-    PhysicsEngineInst.update(deltaTime);
-    player.update(deltaTime)
+    player.update(ticker.deltaTime)
   })
   window.onresize = function (event){    
     var w = window.innerWidth;    
     var h = window.innerHeight;    
-    let scaleWidth = w / ( 8 * 16);
-    let scaleHeight = h / (8 * 16);
+    let scaleWidth = w / ( cols * 16);
+    let scaleHeight = h / (rows * 16);
     tilemap.scale.x = scaleWidth;
     tilemap.scale.y = scaleHeight;
     app.stage.addChild(tilemap);

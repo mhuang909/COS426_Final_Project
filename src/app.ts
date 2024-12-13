@@ -2,11 +2,8 @@ import { Controller } from "@components/controller/Controller";
 import { Player } from "@components/objects/Player/player";
 import { AnimatedSprite, Application, Assets, Container, Spritesheet, Texture } from "pixi.js";
 import { atlasData } from "./assets/atlas";
-import { Platform } from "@components/objects/Platform/Platform";
-import { Tilemap } from "@pixi/tilemap";
-import { sceneData1 } from "./assets/scenes/scene1"
+import { sceneData0 } from "./assets/scenes/scene0"
 import { PhysicsEngineInst } from "@components/physics/physics";
-import { CollisionBody } from "@components/physics/collisionbody";
 import { Scene } from "@components/scenes/Scene";
 
 
@@ -54,7 +51,7 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
     }
   )
 
-  const scene = new Scene(sceneData1, tileSpriteSheet)
+  const scene = new Scene(sceneData0, tileSpriteSheet)
 
 
   const scaleX = app.renderer.width / (scene.cols * 16)

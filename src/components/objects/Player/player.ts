@@ -14,7 +14,6 @@ export class Player {
   dirView: Container;
   controller: Controller;
   animations: PlayerAnimations;
-  debug: Rectangle;
   relativeX: number;
   relativeY: number;
   physicsBody: PhysicsBody;
@@ -32,8 +31,6 @@ export class Player {
 
     this.view.addChild(this.animations.walk)
 
-    this.debug = new Rectangle(0, 0, this.view.width, this.view.height)
-    this.view.addChild(this.debug)
 
     this.view.pivot.set(this.view.width / 2, this.view.height / 2)
 

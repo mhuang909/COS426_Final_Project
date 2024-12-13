@@ -6,7 +6,8 @@ import { Container, Spritesheet, SpritesheetData, TextureSource } from "pixi.js"
 export type SceneData = {
   rows: number,
   cols: number,
-  data: number[]
+  tiles: number[]
+  platforms: { x: number, y: number, w: number, h: number }[]
 }
 
 
@@ -24,6 +25,7 @@ export class Scene {
 
     this.render(data, spritesheet)
     this.view.addChild(this.tilemap)
+    this.buildPlatforms(data)
   }
 
   render(data: SceneData, spritesheet: Spritesheet<SpritesheetData>) {
@@ -33,18 +35,20 @@ export class Scene {
 
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < this.cols; j++) {
-        let id = data.data[i * this.cols + j];
+        let id = data.tiles[i * this.cols + j];
         this.tilemap.tile(spritesheet.textures[ids[id] ?? "flower1"], j * 16, i * 16)
-        if (id != 0) {
-          this.buildPlatform(j * 16, i * 16, 16, 16, 1)
-        }
       }
     }
   }
 
-  buildPlatform(x: number, y: number, w: number, h: number, scale: number) {
+  buildPlatforms(data: SceneData) {
+    for (const { x, y, w, h } of data.platforms) {
+      this.buildPlatform(x * 16, y * 16, w * 16, h * 16)
+    }
+  }
+
+  buildPlatform(x: number, y: number, w: number, h: number) {
     const platform = new Platform(x, y, w, h)
-    platform.view.scale = scale
     this.view.addChild(platform.view)
 
   }

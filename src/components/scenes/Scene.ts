@@ -1,4 +1,5 @@
 import { Platform } from "@components/objects/Platform/Platform";
+import { Player } from "@components/objects/Player/player";
 import { Tilemap } from "@pixi/tilemap";
 import { Container, Spritesheet, SpritesheetData } from "pixi.js";
 
@@ -6,8 +7,13 @@ import { Container, Spritesheet, SpritesheetData } from "pixi.js";
 export type SceneData = {
   rows: number,
   cols: number,
+  player: {
+    Player: () => Promise<Player>,
+    x: number,
+    y: number
+  },
   tiles: number[]
-  platforms: { x: number, y: number, w: number, h: number }[]
+  platforms?: { x: number, y: number, w: number, h: number }[]
 }
 
 
@@ -16,6 +22,7 @@ export class Scene {
   tilemap: Tilemap
   cols: number
   rows: number
+  player: Player
 
   constructor(data: SceneData, spritesheet: Spritesheet<SpritesheetData>) {
     this.view = new Container();
@@ -26,6 +33,14 @@ export class Scene {
     this.render(data, spritesheet)
     this.view.addChild(this.tilemap)
     this.buildPlatforms(data)
+    this.init(data)
+  }
+
+  async init(data: SceneData) {
+    this.player = await data.player.Player()
+    this.player.view.x = data.player.x * 16
+    this.player.view.y = data.player.y * 16
+    this.view.addChild(this.player.view)
   }
 
   render(data: SceneData, spritesheet: Spritesheet<SpritesheetData>) {
@@ -42,6 +57,7 @@ export class Scene {
   }
 
   buildPlatforms(data: SceneData) {
+    if (!data.platforms) return;
     for (const { x, y, w, h } of data.platforms) {
       this.buildPlatform(x * 16, y * 16, w * 16, h * 16)
     }
@@ -51,5 +67,9 @@ export class Scene {
     const platform = new Platform(x, y, w, h)
     this.view.addChild(platform.view)
 
+  }
+
+  update(deltaTime: number) {
+    this.player.update(deltaTime)
   }
 }

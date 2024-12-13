@@ -10,9 +10,10 @@ const keyMap: Record<string, control> = {
   ArrowDown: 'down',
   KeyD: 'right',
   ArrowRight: 'right',
+  KeyN: 'next'
 }
 
-type control = 'space' | 'up' | 'down' | 'left' | 'right'
+type control = 'space' | 'up' | 'down' | 'left' | 'right' | 'next'
 
 type key = {
   pressed: boolean,
@@ -36,6 +37,7 @@ export class Controller {
       down: { pressed: false, doubleTap: false, timestamp: 0 },
       left: { pressed: false, doubleTap: false, timestamp: 0 },
       right: { pressed: false, doubleTap: false, timestamp: 0 },
+      next: { pressed: false, doubleTap: false, timestamp: 0 },
     }
 
     this.keyUpCallbacks = []
@@ -79,3 +81,5 @@ export class Controller {
     this.keyUpCallbacks.forEach(fn => fn(key, this.keys[key]))
   }
 }
+
+export const controller = new Controller(100);

@@ -10,7 +10,7 @@ export class Platform {
     this.view.position.set(x, y)
     this.view.width = w
     this.view.height = h
-    this.view.addChild(new Rectangle(0, 0, this.view.width, this.view.height))
+    //this.view.addChild(new Rectangle(0, 0, this.view.width, this.view.height))
     this.view.addChild(new CollisionBody(w, h).view)
   }
 }

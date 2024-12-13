@@ -3,7 +3,7 @@ import { CollisionBody } from "@components/physics/collisionbody";
 import { PhysicsBody } from "@components/physics/physics";
 import { AnimatedSprite, Container } from "pixi.js";
 
-type PlayerAnimations = {
+export type PlayerAnimations = {
   walk: AnimatedSprite
 }
 
@@ -89,3 +89,4 @@ export class Player {
     }
   }
 }
+

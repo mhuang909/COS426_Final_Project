@@ -13,9 +13,11 @@ export class Player {
   dirView: Container;
   controller: Controller;
   animations: PlayerAnimations;
-  debug: Rectangle
+  debug: Rectangle;
+  relativeX: number;
+  relativeY: number;
   physicsBody: PhysicsBody;
-  collisionBody: CollisionBody
+  collisionBody: CollisionBody;
 
   constructor(c: Controller, animations: PlayerAnimations) {
     this.view = new Container();
@@ -25,6 +27,9 @@ export class Player {
 
     this.view.x = window.innerWidth / 2
     this.view.y = window.innerHeight / 2
+
+    this.relativeX = this.view.position.x / window.innerWidth;
+    this.relativeY = this.view.position.y / window.innerHeight;
 
     this.view.addChild(this.animations.walk)
 
@@ -44,6 +49,9 @@ export class Player {
   }
 
   update(deltaTime: number) {
+    this.relativeX = this.view.position.x / window.innerWidth;
+    this.relativeY = this.view.position.y / window.innerHeight;
+
     if (this.controller.keys['right'].pressed) {
       this.animations.walk.play()
       this.view.scale.x = 1

@@ -3,6 +3,9 @@ import { CollisionBody } from "@components/physics/collisionbody";
 import { PhysicsBody, PhysicsEngine } from "@components/physics/physics";
 import { AnimatedSprite, Container } from "pixi.js";
 
+import jump from '../../../assets/audio/jump_01.mp3';
+
+
 
 export type PlayerAnimations = {
   walk: AnimatedSprite
@@ -21,6 +24,8 @@ export class Player {
   jumping: boolean
   jumpStart: number
   jumpEnd: boolean
+  justDied: boolean
+  lastDeath: number
 
 
   constructor(c: Controller, animations: PlayerAnimations, engine: PhysicsEngine) {
@@ -47,12 +52,22 @@ export class Player {
 
     this.jumping = false;
     this.jumpHeight = this.view.height / 2;
+    this.lastDeath = 0;
+
   }
 
   update(deltaTime: number) {
     this.relativeX = this.view.position.x / window.innerWidth;
     this.relativeY = this.view.position.y / window.innerHeight;
-
+    if (this.lastDeath > 0){
+      console.log(deltaTime);
+      this.lastDeath -= deltaTime;
+      this.animations.walk.gotoAndStop(0)
+      this.physicsBody.speed.setX(0);
+      this.physicsBody.speed.setY(0);
+      return;
+    }
+    this.lastDeath = 0;
     if (this.controller.keys['right'].pressed) {
       this.animations.walk.play()
       this.view.scale.x = Math.abs(this.view.scale.x)
@@ -72,6 +87,8 @@ export class Player {
       if (!this.jumping) {
         this.jumping = true
         this.jumpStart = this.view.y
+        let audio = new Audio(jump);
+        audio.play();
       }
 
       if (!this.jumpEnd) {

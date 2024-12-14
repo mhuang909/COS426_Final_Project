@@ -1,6 +1,6 @@
 import { controller } from "@components/controller/Controller";
 import { Player } from "@components/objects/Player/player";
-import { AnimatedSprite, Application, Assets, Spritesheet, Texture } from "pixi.js";
+import { AnimatedSprite, Application, Assets, Spritesheet, Texture, Text } from "pixi.js";
 import { atlasData } from "./assets/atlas";
 import { Scenes } from "@components/scenes/Scenes";
 import { SceneManager } from "@components/scenes/SceneManager";
@@ -52,7 +52,6 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
     const scaleX = app.renderer.width / (scene.cols * 16)
     const scaleY = app.renderer.height / (scene.rows * 16)
     const scale = Math.min(scaleX, scaleY)
-
     scene.view.scale = scale
 
     // Apply updates

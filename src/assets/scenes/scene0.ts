@@ -1,3 +1,4 @@
+import { Platform } from "@components/objects/Platform/Platform";
 import { CollisionBody } from "@components/physics/collisionbody";
 import { SceneData } from "@components/scenes/Scene";
 
@@ -27,26 +28,33 @@ export const sceneData0: SceneData = {
       2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 1, 1, 1, 1, 3, 3, 1, 1, 1, 1, 3, 3, 1, 1, 1, 1, 1, 1,
       2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
     ],
-  platforms: [
-    { x: 0, y: 0, w: 32, h: 1 },
-    { x: 0, y: 1, w: 1, h: 13 },
-    { x: 31, y: 1, w: 1, h: 11 },
-    { x: 0, y: 14, w: 12, h: 1 },
-    { x: 14, y: 14, w: 4, h: 1 },
-    { x: 20, y: 14, w: 4, h: 1 },
-    { x: 26, y: 14, w: 6, h: 1 },
-  ],
-  spikes: [
-    { x: 12, y: 14, w: 2, h: 1 },
-    { x: 18, y: 14, w: 2, h: 1 },
-    { x: 24, y: 14, w: 2, h: 1 },
-  ],
   collisions: [
     {
       create: (e, { x, y, w, h }) => new CollisionBody(e, x, y, w, h, 'exit', true),
       boxes: [
         { x: 31.5, y: 12, w: 1, h: 2 }
       ]
+    },
+    {
+      create: (e, { x, y, w, h }) => new CollisionBody(e, x, y, w, h, 'spike', true),
+      boxes: [
+        { x: 12, y: 14, w: 2, h: 1 },
+        { x: 18, y: 14, w: 2, h: 1 },
+        { x: 24, y: 14, w: 2, h: 1 },
+      ]
+    },
+    {
+      create: (e, { x, y, w, h }) => new Platform(e, x, y, w, h),
+      boxes: [
+        { x: 0, y: 0, w: 32, h: 1 },
+        { x: 0, y: 1, w: 1, h: 13 },
+        { x: 31, y: 1, w: 1, h: 11 },
+        { x: 0, y: 14, w: 12, h: 1 },
+        { x: 14, y: 14, w: 4, h: 1 },
+        { x: 20, y: 14, w: 4, h: 1 },
+        { x: 26, y: 14, w: 6, h: 1 },
+      ]
     }
+
   ]
 }

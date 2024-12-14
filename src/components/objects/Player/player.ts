@@ -61,7 +61,7 @@ export class Player {
     this.collisionBody.view.x = this.playerView.width / 2 - this.collisionBody.view.width / 2
     this.collisionBody.view.y = this.playerView.height - this.collisionBody.view.height
     this.playerView.pivot.set(this.playerView.width / 2, this.playerView.height / 2)
-    this.playerView.addChild(new Rectangle(0, 0, this.playerView.width, this.playerView.height, "#FFFFFF"))
+    this.playerView.addChild(new Rectangle(0, 0, this.playerView.width, this.playerView.height, "#FFFFFF00"))
 
     this.view.pivot.set(this.playerView.width / 2, this.playerView.height / 2)
 
@@ -79,13 +79,13 @@ export class Player {
     this.swordCooldown = 0
     this.slash = false
 
-    this.collisionBody.onCollision((o, sides) => {
+    this.collisionBody.onCollision((_, sides) => {
       if (sides.includes("bottom")) {
         this.jumpEnd = true
       }
     })
 
-    this.swordCollider.onCollision((o, sides) => {
+    this.swordCollider.onCollision((o, _) => {
       if (o.type === 'spike' && this.slash) {
         this.physicsBody.speed.y -= 8
         this.slash = false

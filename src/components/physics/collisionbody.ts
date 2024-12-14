@@ -26,7 +26,7 @@ export class CollisionBody {
     this.view.x = x;
     this.view.y = y;
     this.type = type;
-    this.view.addChild(new Rectangle(0, 0, w, h, "#00FF00"))
+    this.view.addChild(new Rectangle(0, 0, w, h, "#00FF0000"))
     this.trigger = trigger ?? false;
     this.callbacks = [];
     engine.colliders.push(this)
@@ -37,7 +37,7 @@ export class CollisionBody {
       this.maxY() <= other.minY() || this.minY() >= other.maxY()) return []
 
     const pcTopBottom = ((this.maxX() > other.maxX() ? other.maxX() : this.maxX()) - (this.minX() < other.minX() ? other.minX() : this.minX())) / (this.maxX() - this.minX())
-    const pcLeftRight = ((this.maxY() > other.maxY() ? other.maxY() : this.maxY()) - (this.minY() < other.minY() ? other.minY() : this.minY())) / (this.maxY() - this.minY())
+    // const pcLeftRight = ((this.maxY() > other.maxY() ? other.maxY() : this.maxY()) - (this.minY() < other.minY() ? other.minY() : this.minY())) / (this.maxY() - this.minY())
 
 
     const sides = []

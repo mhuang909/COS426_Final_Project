@@ -53,6 +53,8 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
     const scaleY = app.renderer.height / (scene.rows * 16)
     const scale = Math.min(scaleX, scaleY)
     scene.view.scale = scale
+    scene.view.x = (app.renderer.width - (scene.cols * 16 * scale)) / 2
+    scene.view.y = (app.renderer.height - (scene.rows * 16 * scale)) / 2
 
     // Apply updates
     const deltaTime = ticker.deltaTime

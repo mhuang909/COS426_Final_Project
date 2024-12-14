@@ -52,6 +52,7 @@ export class SceneManager {
   }
 
   attach() {
+    this.scenes[this.currentScene].reset()
     this.view.addChild(this.scenes[this.currentScene].view)
   }
   detatch() {

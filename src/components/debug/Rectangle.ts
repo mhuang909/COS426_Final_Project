@@ -5,7 +5,7 @@ export class Rectangle extends Graphics {
   constructor(x: number, y: number, w: number, h: number, c?: StrokeInput) {
     super()
     this.beginPath();
-    this.setStrokeStyle(c ?? "#FF0000")
+    this.setStrokeStyle(c ?? "#FF000000")
     this.rect(x, y, w, h)
     this.stroke()
     this.closePath()

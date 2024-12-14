@@ -4,8 +4,6 @@ import { PhysicsEngine } from "@components/physics/physics";
 import { Tilemap } from "@pixi/tilemap";
 import { Container, Spritesheet, SpritesheetData } from "pixi.js";
 import spike from '../../assets/audio/spike.mp3';
-import { Exit } from "@components/objects/Exit/Exit";
-import { CollisionBody } from "@components/physics/collisionbody";
 
 
 export type SceneData = {
@@ -16,8 +14,6 @@ export type SceneData = {
     y: number
   },
   tiles: number[]
-  platforms?: { x: number, y: number, w: number, h: number }[]
-  spikes?: { x: number, y: number, w: number, h: number }[],
   collisions?: {
     create: (engine: PhysicsEngine, data: { x: number, y: number, w: number, h: number }) => { view: Container },
     boxes: { x: number, y: number, w: number, h: number }[]
@@ -32,6 +28,7 @@ export class Scene {
   cols: number
   rows: number
   player: Player
+  playerStart: { x: number, y: number }
   physicsEngine: PhysicsEngine
   nextScene?: () => void
 
@@ -40,21 +37,18 @@ export class Scene {
     this.tilemap = new Tilemap(spritesheet.textureSource)
     this.cols = data.cols
     this.rows = data.rows
-
     this.physicsEngine = new PhysicsEngine()
-
     this.render(data, spritesheet)
     this.view.addChild(this.tilemap)
     this.buildPlatforms(data)
+    this.playerStart = data.player
     this.init(data)
   }
 
   async init(data: SceneData) {
     this.player = await Player.Create(this.physicsEngine)
-    this.player.view.x = data.player.x * 16
-    this.player.view.y = data.player.y * 16
 
-    this.player.collisionBody.onCollision((o, sides) => {
+    this.player.collisionBody.onCollision((o, _) => {
 
       if (o.type === 'spike') {
         const spikeaudio = new Audio(spike)
@@ -68,9 +62,13 @@ export class Scene {
       }
     })
 
-
-
+    this.reset()
     this.view.addChild(this.player.view)
+  }
+
+  reset() {
+    this.player.view.x = this.playerStart.x * 16
+    this.player.view.y = this.playerStart.y * 16
   }
 
   render(data: SceneData, spritesheet: Spritesheet<SpritesheetData>) {
@@ -87,14 +85,6 @@ export class Scene {
   }
 
   buildPlatforms(data: SceneData) {
-    if (!data.platforms) return;
-    for (const { x, y, w, h } of data.platforms) {
-      this.buildPlatform(x * 16, y * 16, w * 16, h * 16)
-    }
-    for (const { x, y, w, h } of data.spikes) {
-      this.view.addChild(new CollisionBody(this.physicsEngine, x * 16, y * 16, w * 16, h * 16, 'spike').view)
-    }
-
     if (!data.collisions) return;
     for (const { create, boxes } of data.collisions) {
       for (const { x, y, w, h } of boxes) {

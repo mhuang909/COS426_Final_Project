@@ -1,3 +1,4 @@
+import { Platform } from "@components/objects/Platform/Platform";
 import { CollisionBody } from "@components/physics/collisionbody";
 import { SceneData } from "@components/scenes/Scene";
 
@@ -27,39 +28,45 @@ export const sceneData1: SceneData = {
       2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1,
       2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
     ],
-  platforms: [
-    { x: 0, y: 0, w: 32, h: 1 },
-    { x: 0, y: 1, w: 1, h: 14 },
-    { x: 31, y: 1, w: 1, h: 11 },
-    { x: 1, y: 14, w: 5, h: 1 },
-    { x: 6, y: 13, w: 6, h: 2 },
-    { x: 7, y: 11, w: 4, h: 2 },
-    { x: 8, y: 4, w: 2, h: 7 },
-    { x: 9, y: 2, w: 1, h: 2 },
-    { x: 3, y: 9, w: 3, h: 1 },
-    { x: 4, y: 7, w: 1, h: 1 },
-    { x: 5, y: 5, w: 1, h: 1 },
-    { x: 12, y: 9, w: 1, h: 1 },
-    { x: 14, y: 8, w: 2, h: 1 },
-    { x: 18, y: 8, w: 1, h: 1 },
-    { x: 22, y: 8, w: 1, h: 1 },
-    { x: 20, y: 7, w: 1, h: 1 },
-    { x: 20, y: 7, w: 1, h: 1 },
-    { x: 16, y: 6, w: 1, h: 1 },
-    { x: 21, y: 6, w: 1, h: 1 },
-    { x: 23, y: 11, w: 3, h: 1 },
-    { x: 26, y: 10, w: 2, h: 1 },
-    { x: 16, y: 12, w: 1, h: 1 },
-    { x: 30, y: 14, w: 2, h: 1 },
-  ],
-  spikes: [
-    { x: 12, y: 14, w: 18, h: 1 }
-  ],
   collisions: [
     {
       create: (e, { x, y, w, h }) => new CollisionBody(e, x, y, w, h, 'exit', true),
       boxes: [
         { x: 31.5, y: 12, w: 1, h: 2 }
+      ]
+    },
+    {
+      create: (e, { x, y, w, h }) => new CollisionBody(e, x, y, w, h, 'spike', true),
+      boxes: [
+        { x: 12, y: 14, w: 18, h: 1 }
+      ]
+    },
+    {
+      create: (e, { x, y, w, h }) => new Platform(e, x, y, w, h),
+      boxes: [
+        { x: 0, y: 0, w: 32, h: 1 },
+        { x: 0, y: 1, w: 1, h: 14 },
+        { x: 31, y: 1, w: 1, h: 11 },
+        { x: 1, y: 14, w: 5, h: 1 },
+        { x: 6, y: 13, w: 6, h: 2 },
+        { x: 7, y: 11, w: 4, h: 2 },
+        { x: 8, y: 4, w: 2, h: 7 },
+        { x: 9, y: 2, w: 1, h: 2 },
+        { x: 3, y: 9, w: 3, h: 1 },
+        { x: 4, y: 7, w: 1, h: 1 },
+        { x: 5, y: 5, w: 1, h: 1 },
+        { x: 12, y: 9, w: 1, h: 1 },
+        { x: 14, y: 8, w: 2, h: 1 },
+        { x: 18, y: 8, w: 1, h: 1 },
+        { x: 22, y: 8, w: 1, h: 1 },
+        { x: 20, y: 7, w: 1, h: 1 },
+        { x: 20, y: 7, w: 1, h: 1 },
+        { x: 16, y: 6, w: 1, h: 1 },
+        { x: 21, y: 6, w: 1, h: 1 },
+        { x: 23, y: 11, w: 3, h: 1 },
+        { x: 26, y: 10, w: 2, h: 1 },
+        { x: 16, y: 12, w: 1, h: 1 },
+        { x: 30, y: 14, w: 2, h: 1 },
       ]
     }
   ]

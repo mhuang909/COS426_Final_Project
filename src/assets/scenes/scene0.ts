@@ -1,3 +1,4 @@
+import { CollisionBody } from "@components/physics/collisionbody";
 import { SceneData } from "@components/scenes/Scene";
 
 export const sceneData0: SceneData = {
@@ -39,5 +40,13 @@ export const sceneData0: SceneData = {
     { x: 12, y: 14, w: 2, h: 1 },
     { x: 18, y: 14, w: 2, h: 1 },
     { x: 24, y: 14, w: 2, h: 1 },
+  ],
+  collisions: [
+    {
+      create: (e, { x, y, w, h }) => new CollisionBody(e, x, y, w, h, 'exit', true),
+      boxes: [
+        { x: 31.5, y: 12, w: 1, h: 2 }
+      ]
+    }
   ]
 }

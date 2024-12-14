@@ -54,7 +54,7 @@ export class Player {
     this.playerAnimations.setAnimation("walk")
     this.playerView.addChild(this.playerAnimations.view)
 
-    this.collisionBody = new CollisionBody(engine, this.playerView.width / 4, this.playerView.height / 2, 0)
+    this.collisionBody = new CollisionBody(engine, 0, 0, this.playerView.width / 4, this.playerView.height / 2, 'player')
     this.playerView.addChild(this.collisionBody.view)
     this.physicsBody = new PhysicsBody(engine, this.view, this.collisionBody, 7, 0.2)
 
@@ -73,7 +73,7 @@ export class Player {
     this.swordView.x = this.playerView.width / 2
     this.swordView.rotation = Math.PI / 2;
     this.swordView.y += 8
-    this.swordCollider = new CollisionBody(engine, this.swordView.width, this.swordView.height, 8, true)
+    this.swordCollider = new CollisionBody(engine, 0, 0, this.swordView.width, this.swordView.height, 'sword', true)
     this.swordView.addChild(this.swordCollider.view)
     this.swordCooldownMax = 30
     this.swordCooldown = 0
@@ -86,7 +86,7 @@ export class Player {
     })
 
     this.swordCollider.onCollision((o, sides) => {
-      if (o.tile_type === 2 && this.slash) {
+      if (o.type === 'spike' && this.slash) {
         this.physicsBody.speed.y -= 8
         this.slash = false
 
@@ -128,7 +128,6 @@ export class Player {
 
     if (this.controller.keys.space.pressed && (this.physicsBody.onGround || this.jumping)) {
       if (!this.jumping) {
-        console.log("here")
         this.jumping = true
         if (!this.jumpEnd) {
           this.playerAnimations.setAnimation("jump")
@@ -162,16 +161,11 @@ export class Player {
       this.jumpLanded = true
     }
 
-    console.log(this.jumping || !this.jumpLanded)
 
     if (this.controller.keys.down.pressed && this.swordCooldown === 0 && (Math.abs(this.physicsBody.speed.y) > 0.1)) {
-      console.log("hello")
       this.slash = true
       this.swordCooldown = this.swordCooldownMax
       this.swordAnimations.setAnimation('sword').setFrame(0).play()
-    }
-    if (this.controller.keys.down.pressed) {
-      console.log(this.jumping)
     }
   }
 

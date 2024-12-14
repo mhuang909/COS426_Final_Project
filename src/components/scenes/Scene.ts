@@ -4,6 +4,8 @@ import { PhysicsEngine } from "@components/physics/physics";
 import { Tilemap } from "@pixi/tilemap";
 import { Container, Spritesheet, SpritesheetData } from "pixi.js";
 import spike from '../../assets/audio/spike.mp3';
+import { Exit } from "@components/objects/Exit/Exit";
+import { CollisionBody } from "@components/physics/collisionbody";
 
 
 export type SceneData = {
@@ -16,6 +18,10 @@ export type SceneData = {
   tiles: number[]
   platforms?: { x: number, y: number, w: number, h: number }[]
   spikes?: { x: number, y: number, w: number, h: number }[],
+  collisions?: {
+    create: (engine: PhysicsEngine, data: { x: number, y: number, w: number, h: number }) => { view: Container },
+    boxes: { x: number, y: number, w: number, h: number }[]
+  }[]
 
 }
 
@@ -27,6 +33,7 @@ export class Scene {
   rows: number
   player: Player
   physicsEngine: PhysicsEngine
+  nextScene?: () => void
 
   constructor(data: SceneData, spritesheet: Spritesheet<SpritesheetData>) {
     this.view = new Container();
@@ -49,13 +56,15 @@ export class Scene {
 
     this.player.collisionBody.onCollision((o, sides) => {
 
-      if (o.tile_type === 2) {
+      if (o.type === 'spike') {
         const spikeaudio = new Audio(spike)
         spikeaudio.play();
         this.player.lastDeath = 20;
         this.player.view.x = data.player.x * 16
         this.player.view.y = data.player.y * 16
         return;
+      } else if (o.type === 'exit') {
+        this.nextScene?.()
       }
     })
 
@@ -80,15 +89,22 @@ export class Scene {
   buildPlatforms(data: SceneData) {
     if (!data.platforms) return;
     for (const { x, y, w, h } of data.platforms) {
-      this.buildPlatform(x * 16, y * 16, w * 16, h * 16, 1)
+      this.buildPlatform(x * 16, y * 16, w * 16, h * 16)
     }
     for (const { x, y, w, h } of data.spikes) {
-      this.buildPlatform(x * 16, y * 16, w * 16, h * 16, 2)
+      this.view.addChild(new CollisionBody(this.physicsEngine, x * 16, y * 16, w * 16, h * 16, 'spike').view)
+    }
+
+    if (!data.collisions) return;
+    for (const { create, boxes } of data.collisions) {
+      for (const { x, y, w, h } of boxes) {
+        this.view.addChild(create(this.physicsEngine, { x: x * 16, y: y * 16, w: w * 16, h: h * 16 }).view)
+      }
     }
   }
 
-  buildPlatform(x: number, y: number, w: number, h: number, tile_type: number) {
-    const platform = new Platform(this.physicsEngine, x, y, w, h, tile_type)
+  buildPlatform(x: number, y: number, w: number, h: number) {
+    const platform = new Platform(this.physicsEngine, x, y, w, h)
     this.view.addChild(platform.view)
 
   }

@@ -4,12 +4,14 @@ import { PhysicsEngine } from "./physics";
 
 type side = 'top' | 'bottom' | 'left' | 'right' | 'none'
 
+export type CollisionType = 'platform' | 'spike' | 'exit' | 'player' | 'sword'
+
 export type collisonCallbackFn = (other: CollisionBody, s: side[]) => void;
 
 export class CollisionBody {
 
   view: Container
-  tile_type: number
+  type: CollisionType
   /* 0: player
   1: platform
   2: spike
@@ -18,10 +20,12 @@ export class CollisionBody {
   callbacks: collisonCallbackFn[]
   trigger: boolean
 
-  constructor(engine: PhysicsEngine, w: number, h: number, tile_type: number, trigger?: boolean) {
+  constructor(engine: PhysicsEngine, x: number, y: number, w: number, h: number, type: CollisionType, trigger?: boolean) {
 
     this.view = new Container()
-    this.tile_type = tile_type;
+    this.view.x = x;
+    this.view.y = y;
+    this.type = type;
     this.view.addChild(new Rectangle(0, 0, w, h, "#00FF00"))
     this.trigger = trigger ?? false;
     this.callbacks = [];

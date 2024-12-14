@@ -1,4 +1,4 @@
-import { Container, Text} from "pixi.js";
+import { Container, Text } from "pixi.js";
 import { Scene } from "./Scene";
 
 export class SceneManager {
@@ -18,24 +18,25 @@ export class SceneManager {
     if (this.ids?.[id] !== undefined) return false;
     this.ids[id] = this.scenes.length
     this.scenes.push(scene)
+    scene.nextScene = () => this.nextScene()
 
     if (this.currentScene === -1) {
       this.currentScene = 0;
       this.view.addChild(this.scenes[this.currentScene].view)
     }
-    if (id === "level_0"){
+    if (id === "level_0") {
       const Title = new Text({
         text: 'Pogo Parkour!',
         style: {
-            fontSize: 350,
-            align: 'center',
+          fontSize: 350,
+          align: 'center',
         },
       });
       const controls = new Text({
         text: 'Use Left and Right to Move\nSpace to jump\nDown Arrow Key to Pogo on Spikes!',
         style: {
-            fontSize: 150,
-            align: 'left',
+          fontSize: 150,
+          align: 'left',
         },
       });
       Title.scale.set(0.1);
@@ -46,7 +47,6 @@ export class SceneManager {
       controls.scale.set(0.1);
       scene.view.addChild(Title, controls);
     }
-
 
     return true
   }

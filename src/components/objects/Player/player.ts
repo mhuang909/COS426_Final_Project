@@ -3,10 +3,13 @@ import { controller, Controller } from "@components/controller/Controller";
 import { Rectangle } from "@components/debug/Rectangle";
 import { CollisionBody } from "@components/physics/collisionbody";
 import { PhysicsBody, PhysicsEngine } from "@components/physics/physics";
-import { AnimatedSprite, compileShader, Container, Spritesheet, Texture } from "pixi.js";
+import { AnimatedSprite, Container, Spritesheet, Texture } from "pixi.js";
 import { atlasData } from "../../../assets/atlas";
+import jump from '../../../assets/audio/jump_01.mp3';
 
 type PlayerAnimationIds = "walk" | "jump" | "sword"
+
+
 
 export type PlayerAnimations = Record<PlayerAnimationIds, AnimatedSprite>
 
@@ -33,6 +36,7 @@ export class Player {
   swordCooldown: number
   swordCooldownMax: number
   slash: boolean
+  lastDeath: number
 
 
   constructor(c: Controller, animations: PlayerAnimations, engine: PhysicsEngine) {
@@ -94,9 +98,18 @@ export class Player {
     this.jumpLanded = false;
   }
 
+
   update(deltaTime: number) {
     this.swordCooldown = Math.max(this.swordCooldown - deltaTime, 0)
     this.slash = false
+
+    if (this.lastDeath > 0) {
+      this.lastDeath -= deltaTime;
+      this.playerAnimations.setAnimation('walk').setFrame(0)
+      this.physicsBody.speed.setX(0);
+      return;
+    }
+    this.lastDeath = 0;
 
     if (this.controller.keys['right'].pressed) {
       this.playerAnimations.setAnimation("walk").play()
@@ -121,6 +134,8 @@ export class Player {
           this.playerAnimations.setAnimation("jump")
         }
         this.jumpStart = this.view.y
+        let audio = new Audio(jump);
+        audio.play();
       }
 
       if (!this.jumpEnd) {

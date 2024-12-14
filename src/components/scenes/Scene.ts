@@ -3,6 +3,7 @@ import { Player } from "@components/objects/Player/player";
 import { PhysicsEngine } from "@components/physics/physics";
 import { Tilemap } from "@pixi/tilemap";
 import { Container, Spritesheet, SpritesheetData } from "pixi.js";
+import spike from '../../assets/audio/spike.mp3';
 
 
 export type SceneData = {
@@ -49,6 +50,9 @@ export class Scene {
     this.player.collisionBody.onCollision((o, sides) => {
 
       if (o.tile_type === 2) {
+        const spikeaudio = new Audio(spike)
+        spikeaudio.play();
+        this.player.lastDeath = 20;
         this.player.view.x = data.player.x * 16
         this.player.view.y = data.player.y * 16
         return;

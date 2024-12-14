@@ -1,8 +1,4 @@
-import { controller } from "@components/controller/Controller";
-import { Player, PlayerAnimations } from "@components/objects/Player/player";
 import { SceneData } from "@components/scenes/Scene";
-import { AnimatedSprite, Spritesheet, Texture } from "pixi.js";
-import { atlasData } from "../atlas";
 
 export const sceneData3: SceneData = {
   rows: 16,
@@ -10,22 +6,6 @@ export const sceneData3: SceneData = {
   player: {
     x: 3.5,
     y: 12.8,
-    Player: async (scene) => {
-      const characterSpriteSheet = new Spritesheet(
-        Texture.from(atlasData.characters.meta.image),
-        atlasData.characters
-      )
-      await characterSpriteSheet.parse()
-      const playerWalk = new AnimatedSprite(characterSpriteSheet.animations.playerWalk)
-      playerWalk.animationSpeed = 0.2
-      playerWalk.scale = 1
-
-      const animations: PlayerAnimations = {
-        walk: playerWalk,
-      }
-
-      return new Player(controller, animations, scene.physicsEngine)
-    }
   },
   tiles:
     [

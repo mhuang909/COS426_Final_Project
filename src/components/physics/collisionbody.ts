@@ -21,8 +21,6 @@ export class CollisionBody {
   constructor(engine: PhysicsEngine, w: number, h: number, tile_type: number, trigger?: boolean) {
 
     this.view = new Container()
-    this.view.width = w
-    this.view.height = h
     this.tile_type = tile_type;
     this.view.addChild(new Rectangle(0, 0, w, h, "#00FF00"))
     this.trigger = trigger ?? false;

@@ -17,7 +17,6 @@ export class PhysicsBody {
 
     this.view = v;
     this.collision = collision;
-    this.view.addChild(collision.view)
     this.mass = m
     this.force = new Vector2()
     this.speed = new Vector2()

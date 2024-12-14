@@ -14,25 +14,59 @@ export const atlasData: Record<sheet, SpritesheetData> = {
       size: { w: 736, h: 128 },
     },
     frames: {
-      player1: {
-        frame: { x: 0, y: 0, h: 32, w: 32 },
+      player_walk_0: {
+        frame: { x: 0, y: 32, h: 32, w: 32 },
         sourceSize: { w: 32, h: 32 }
       },
-      player2: {
-        frame: { x: 32, y: 0, h: 32, w: 32 },
+      player_walk_1: {
+        frame: { x: 32 * 1, y: 32, h: 32, w: 32 },
         sourceSize: { w: 32, h: 32 }
       },
-      player3: {
-        frame: { x: 64, y: 0, h: 32, w: 32 },
+      player_walk_2: {
+        frame: { x: 32 * 2, y: 32, h: 32, w: 32 },
         sourceSize: { w: 32, h: 32 }
       },
-      player4: {
-        frame: { x: 96, y: 0, h: 32, w: 32 },
+      player_walk_3: {
+        frame: { x: 32 * 3, y: 32, h: 32, w: 32 },
         sourceSize: { w: 32, h: 32 }
-      }
+      },
+      player_jump_0: {
+        frame: { x: 32 * 4, y: 32, h: 32, w: 32 },
+        sourceSize: { w: 32, h: 32 }
+      },
+      player_jump_1: {
+        frame: { x: 32 * 5, y: 32, h: 32, w: 32 },
+        sourceSize: { w: 32, h: 32 }
+      },
+      player_jump_2: {
+        frame: { x: 32 * 6, y: 32, h: 32, w: 32 },
+        sourceSize: { w: 32, h: 32 }
+      },
+      player_slash_0: {
+        frame: { x: 32 * 4, y: 32 * 3, h: 32, w: 32 },
+        sourceSize: { w: 32, h: 32 }
+      },
+      player_slash_1: {
+        frame: { x: 32 * 5, y: 32 * 3, h: 32, w: 32 },
+        sourceSize: { w: 32, h: 32 }
+      },
+      player_slash_2: {
+        frame: { x: 32 * 6, y: 32 * 3, h: 32, w: 32 },
+        sourceSize: { w: 32, h: 32 }
+      },
+      player_slash_3: {
+        frame: { x: 32 * 7, y: 32 * 3, h: 32, w: 32 },
+        sourceSize: { w: 32, h: 32 }
+      },
+      player_slash_4: {
+        frame: { x: 32 * 8, y: 32 * 3, h: 32, w: 32 },
+        sourceSize: { w: 32, h: 32 }
+      },
     },
     animations: {
-      playerWalk: ['player1', 'player2', 'player3', 'player4']
+      playerWalk: ['player_walk_0', 'player_walk_1', 'player_walk_2', 'player_walk_3'],
+      playerJump: ['player_jump_0', 'player_jump_1', 'player_jump_2'],
+      playerSlash: ['player_slash_4', 'player_slash_0', 'player_slash_1', 'player_slash_2', 'player_slash_3', 'player_slash_4']
     }
   },
   tiles: {
@@ -72,7 +106,7 @@ export const atlasData: Record<sheet, SpritesheetData> = {
         frame: { x: 16 * 15, y: 16 * 3, h: 16, w: 16 },
         sourceSize: { w: 16, h: 16 },
         spriteSourceSize: { w: 6, h: 16, x: 0, y: 0 }
-      },      
+      },
       fence_right: {
         frame: { x: 16 * 16, y: 16 * 3, h: 16, w: 16 },
         sourceSize: { w: 16, h: 16 },

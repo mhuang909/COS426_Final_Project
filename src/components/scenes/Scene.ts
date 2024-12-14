@@ -9,7 +9,6 @@ export type SceneData = {
   rows: number,
   cols: number,
   player: {
-    Player: (scene: Scene) => Promise<Player>,
     x: number,
     y: number
   },
@@ -43,7 +42,7 @@ export class Scene {
   }
 
   async init(data: SceneData) {
-    this.player = await data.player.Player(this)
+    this.player = await Player.Create(this.physicsEngine)
     this.player.view.x = data.player.x * 16
     this.player.view.y = data.player.y * 16
 

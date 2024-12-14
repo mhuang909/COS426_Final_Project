@@ -31,8 +31,8 @@ export class CollisionBody {
   }
 
   isColliding(other: CollisionBody): side[] {
-    if (this.maxX() + 4 <= other.minX() || this.minX() - 4 >= other.maxX() ||
-      this.maxY() + 16 <= other.minY() || this.minY() - 16 >= other.maxY()) return []
+    if (this.maxX() <= other.minX() || this.minX() >= other.maxX() ||
+      this.maxY() <= other.minY() || this.minY() >= other.maxY()) return []
 
     const pcTopBottom = ((this.maxX() > other.maxX() ? other.maxX() : this.maxX()) - (this.minX() < other.minX() ? other.minX() : this.minX())) / (this.maxX() - this.minX())
     const pcLeftRight = ((this.maxY() > other.maxY() ? other.maxY() : this.maxY()) - (this.minY() < other.minY() ? other.minY() : this.minY())) / (this.maxY() - this.minY())

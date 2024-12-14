@@ -59,7 +59,7 @@ export class Player {
     this.physicsBody = new PhysicsBody(engine, this.view, this.collisionBody, 7, 0.2)
 
     this.collisionBody.view.x = this.playerView.width / 2 - this.collisionBody.view.width / 2
-    this.collisionBody.view.y = this.playerView.height - this.collisionBody.view.height
+    this.collisionBody.view.y = this.playerView.height - this.collisionBody.view.height - 0.5
     this.playerView.pivot.set(this.playerView.width / 2, this.playerView.height / 2)
     this.playerView.addChild(new Rectangle(0, 0, this.playerView.width, this.playerView.height, "#FFFFFF00"))
 
@@ -153,9 +153,6 @@ export class Player {
       this.jumpEnd = false
     }
 
-    if (!this.jumpLanded && this.jumpEnd) {
-      this.playerAnimations.setAnimation("jump").setFrame(2)
-    }
 
     if (!this.jumping && this.physicsBody.onGround) {
       this.jumpLanded = true
@@ -166,6 +163,11 @@ export class Player {
       this.slash = true
       this.swordCooldown = this.swordCooldownMax
       this.swordAnimations.setAnimation('sword').setFrame(0).play()
+    }
+
+    if (this.physicsBody.speed.y > 0.1) {
+      this.playerAnimations.setAnimation('jump').setFrame(2)
+
     }
   }
 

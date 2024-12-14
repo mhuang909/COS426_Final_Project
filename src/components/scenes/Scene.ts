@@ -50,7 +50,10 @@ export class Scene {
 
     this.player.collisionBody.onCollision((o, _) => {
 
-      if (o.type === 'spike') {
+      const pcLeftRight = (
+        (this.player.collisionBody.maxY() > o.maxY() ? o.maxY() : this.player.collisionBody.maxY())
+        - (this.player.collisionBody.minY() < o.minY() ? o.minY() : this.player.collisionBody.minY())) / (this.player.collisionBody.maxY() - this.player.collisionBody.minY())
+      if (o.type === 'spike' && pcLeftRight > 0.4) {
         const spikeaudio = new Audio(spike)
         spikeaudio.play();
         this.player.lastDeath = 20;
